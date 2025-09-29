@@ -14,9 +14,9 @@ The goal for this is to have an editor where you can make a fish tank, and then 
 
 ## Roadmap
 
-- [ ] add static props / plants
-- [ ] collisions
-- [ ] multiple types of fish
+- [x] add static props / plants
+- [x] collisions
+- [x] multiple types of fish
 - [ ] add animations to fish models
 - [ ] better water shader
 - [ ] editor
