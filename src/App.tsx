@@ -27,6 +27,10 @@ function App() {
           <Plant key={0} type={0} position={[ 2, -8, 2 ]} scale={1} rotation={Math.PI / 4} />
           <Plant key={1} type={0} position={[ -3, -9, -5 ]} scale={2} rotation={Math.PI / 4} />
           <Plant key={2} type={0} position={[ 3, -9, 6 ]} scale={0.6} rotation={2 * Math.PI / 3} />
+          <Plant key={3} type={1} position={[ 2, -9, 5 ]} scale={2} rotation={Math.PI / 3} />
+          <Plant key={4} type={1} position={[ 7, -9, 1 ]} scale={3} rotation={2 * Math.PI / 3} />
+          <Plant key={5} type={1} position={[ -5, -9, 5 ]} scale={2.5} rotation={0} />
+          <Plant key={6} type={1} position={[ -4, -9, -6 ]} scale={4} rotation={Math.PI / 2} />
         </group>
         <group>
           <Rock key={0} type={0} position={[ 0, -7, 0 ]} scale={5} rotation={0} />

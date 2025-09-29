@@ -9,9 +9,10 @@ function Plant({ type, position, scale, rotation }: {
   rotation: number
 }) {
   const { scene: plant0Scene } = useGLTF('/models/plant0.glb')
-  const plantTypes = [ plant0Scene ]
+  const { scene: plant1Scene } = useGLTF('/models/plant1.glb')
+  const plantTypes = [ plant0Scene, plant1Scene ]
   const uniquePlantScene = useMemo(() => plantTypes[type].clone(),
-    [ plant0Scene, type ])
+    [ plant0Scene, plant1Scene, type ])
 
   return <primitive
     object={uniquePlantScene}
