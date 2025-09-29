@@ -1,9 +1,8 @@
 import { useRef, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
-import type { ThreeElements } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
-import {euler, quat, RapierRigidBody, RigidBody, useRapier, vec3} from '@react-three/rapier'
+import {euler, quat, RapierRigidBody, RigidBody, vec3} from '@react-three/rapier'
 
 const gAccel = -0.1
 const vAngular = 0.5
@@ -18,7 +17,6 @@ function clamp(min: number, max: number, val: number) {
 function Guppy() {
   const { scene } = useGLTF('/models/guppy.glb')
   const uniqueScene = useMemo(() => scene.clone(), [scene])
-  const { world } = useRapier()
 
   const fishRef = useRef<RapierRigidBody | null>(null)
   const fishState = useRef<any>({
@@ -37,10 +35,6 @@ function Guppy() {
     if (fishRef && fishRef.current) {
       const fs = fishState.current
       const fishPos = vec3(fishRef.current.translation())
-
-      if (fishRef.current.numColliders() === 0) {
-        return
-      }
 
       // vertical movement behavior
       const aYFactor = clamp(1, 3, Math.abs(fishPos.y - fs.targetY))
@@ -84,44 +78,19 @@ function Guppy() {
       const v = FORWARD.clone()
       v.applyAxisAngle(UP, fs.angle)
       v.normalize().multiplyScalar(fs.speed)
-
-      const nextPos = {
-        x: fishPos.x + v.x * delta,
-        y: fishPos.y + fs.vY * delta,
-        z: fishPos.z + v.z * delta
-      }
-
-      const collider = fishRef.current.collider(0)
-      const hit = world.castShape(
-        fishPos,
-        fishRef.current.rotation(),
-        { x: v.x, y: fs.vY, z: v.z },
-        collider.shape,
-        1,
-        0.1,
-        true,
-        undefined,
-        undefined,
-        collider
-      )
-
-      if (!hit) {
-        // apply movement behavior
-        fishRef.current.setNextKinematicTranslation(nextPos)
-      } else {
-        console.log("collision hit!")
-      }
+      fishRef.current.setLinvel({ x: v.x, y: fs.vY, z: v.z }, true)
 
       const rY = fs.angle + Math.sin(fs.t) / 4
-      fishRef.current.setNextKinematicRotation(
+      fishRef.current.setRotation(
         quat().setFromEuler(euler({
           x: 0, y: rY, z: fs.vY * (Math.PI / 8)
-        }))
+        })),
+        true
       )
     }
   })
 
-  return <RigidBody ref={fishRef} type="kinematicPosition" colliders="ball">
+  return <RigidBody ref={fishRef} colliders={"cuboid"} linearDamping={5} angularDamping={5}>
     <primitive object={uniqueScene} />
   </RigidBody>
 }

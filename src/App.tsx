@@ -6,6 +6,8 @@ import { OrbitControls, Stats } from '@react-three/drei'
 import * as THREE from 'three'
 import { Suspense } from 'react'
 
+const guppyCount = 10
+
 function App() {
   return <Canvas
     style={{ width: '800px', height: '600px' }}
@@ -17,14 +19,7 @@ function App() {
     <Suspense>
       <Physics debug>
         <Tank />
-        <Guppy key={1} />
-        {/*<Guppy key={2} />
-        <Guppy key={3} />
-        <Guppy key={4} />
-        <Guppy key={5} />
-        <Guppy key={6} />
-        <Guppy key={7} />
-        <Guppy key={8} />*/}
+        {Array(guppyCount).fill(null).map((_, i) => <Guppy key={i} />)}
         {/*<color attach="background" args={['black']} />*/}
         <ambientLight intensity={0.5} />
         <pointLight intensity={400} position={[0, 10, 0 ]} />
