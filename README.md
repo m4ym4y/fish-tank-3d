@@ -3,6 +3,11 @@
 
 A virtual fish tank made in three.js using react-three-fiber. Started from the [vite typescript react template](https://vite.dev/).
 
+```
+npm install
+npm run dev
+```
+
 The goal for this is to have an editor where you can make a fish tank, and then create an embed you can put on your website.
 
 ![screenshot of early fish tank build](./public/screenshots/tank1.png)
