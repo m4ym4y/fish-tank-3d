@@ -1,8 +1,8 @@
 import { useRef, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
-import type { ThreeElements } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
+import {euler, quat, RapierRigidBody, RigidBody, vec3} from '@react-three/rapier'
 
 const gAccel = -0.1
 const vAngular = 0.5
@@ -18,7 +18,7 @@ function Guppy() {
   const { scene } = useGLTF('/models/guppy.glb')
   const uniqueScene = useMemo(() => scene.clone(), [scene])
 
-  const fishRef = useRef<ThreeElements['primitive'] | null>(null)
+  const fishRef = useRef<RapierRigidBody | null>(null)
   const fishState = useRef<any>({
     targetY: 0,
     targetAngle: 0,
@@ -34,9 +34,10 @@ function Guppy() {
 
     if (fishRef && fishRef.current) {
       const fs = fishState.current
+      const fishPos = vec3(fishRef.current.translation())
 
       // vertical movement behavior
-      const aYFactor = clamp(1, 3, Math.abs(fishRef.current.position.y - fs.targetY))
+      const aYFactor = clamp(1, 3, Math.abs(fishPos.y - fs.targetY))
       fs.t += delta
       fs.vY += (gAccel + fs.aY ) * delta * aYFactor
       fs.aY *= Math.max((1 - delta), 0)
@@ -46,7 +47,7 @@ function Guppy() {
 
       // bobbing behavior
       if (
-        fishRef.current.position.y < fs.targetY
+        fishPos.y < fs.targetY
         && fs.aY <= 0.1
         && fs.vY <= 0
       ) {
@@ -77,19 +78,21 @@ function Guppy() {
       const v = FORWARD.clone()
       v.applyAxisAngle(UP, fs.angle)
       v.normalize().multiplyScalar(fs.speed)
+      fishRef.current.setLinvel({ x: v.x, y: fs.vY, z: v.z }, true)
 
-      // apply movement behavior
-      fishRef.current.position.y = clamp(-8, 8, fishRef.current.position.y + fs.vY * delta)
-      fishRef.current.position.x = clamp(-8, 8, fishRef.current.position.x + v.x * delta)
-      fishRef.current.position.z = clamp(-8, 8, fishRef.current.position.z + v.z * delta)
-
-      fishRef.current.rotation.z = fs.vY * (Math.PI / 8)
-      fishRef.current.rotation.x = 0
-      fishRef.current.rotation.y = fs.angle + Math.sin(fs.t) / 4
+      const rY = fs.angle + Math.sin(fs.t) / 4
+      fishRef.current.setRotation(
+        quat().setFromEuler(euler({
+          x: 0, y: rY, z: fs.vY * (Math.PI / 8)
+        })),
+        true
+      )
     }
   })
 
-  return <primitive ref={fishRef} object={uniqueScene} />
+  return <RigidBody ref={fishRef} colliders={"cuboid"} linearDamping={5} angularDamping={5}>
+    <primitive object={uniqueScene} />
+  </RigidBody>
 }
 
 export default Guppy
