@@ -6,7 +6,6 @@ import {euler, quat, RapierRigidBody, RigidBody, vec3} from '@react-three/rapier
 
 const gAccel = -0.1
 const vAngular = 0.5
-const swimSpeed = 1.5
 const FORWARD = new THREE.Vector3(1, 0, 0)
 const UP = new THREE.Vector3(0, 1, 0)
 
