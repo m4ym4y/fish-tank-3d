@@ -1,8 +1,8 @@
 import { useRef, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
-import type { ThreeElements } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
+import {euler, quat, RapierRigidBody, RigidBody} from '@react-three/rapier'
 
 const rotationChangeFrequency = 0.3
 const rotationAccel = 0.3
@@ -16,15 +16,11 @@ const FORWARD = new THREE.Vector3(1, 0, 0)
 const UP = new THREE.Vector3(0, 1, 0)
 const RIGHT = new THREE.Vector3(0, 0, 1)
 
-function clamp(min: number, max: number, val: number) {
-  return Math.max(min, Math.min(max, val))
-}
-
 function Angelfish() {
   const { scene } = useGLTF('/models/angelfish.glb')
   const uniqueScene = useMemo(() => scene.clone(), [scene])
 
-  const fishRef = useRef<ThreeElements['primitive'] | null>(null)
+  const fishRef = useRef<RapierRigidBody | null>(null)
   const fishState = useRef({
     speed: 1.5,
     yaw: {pos: Math.random() * Math.PI * 2, vel: 0, targetVel: 0},
@@ -68,20 +64,22 @@ function Angelfish() {
       v.applyAxisAngle(RIGHT, fs.pitch.pos)
       v.applyAxisAngle(UP, fs.yaw.pos)
       v.normalize().multiplyScalar(fs.speed)
+      fishRef.current.setLinvel(v, true)
 
-      // apply movement
-      fishRef.current.position.y = clamp(-8, 8, fishRef.current.position.y + v.y * delta)
-      fishRef.current.position.x = clamp(-8, 8, fishRef.current.position.x + v.x * delta)
-      fishRef.current.position.z = clamp(-8, 8, fishRef.current.position.z + v.z * delta)
-
-      // apply rotation
-      fishRef.current.rotation.z = fs.pitch.pos;
-      fishRef.current.rotation.x = 0;
-      fishRef.current.rotation.y = fs.yaw.pos;
+      fishRef.current.setRotation(
+        quat().setFromEuler(euler({
+          x: 0,
+          y: fs.yaw.pos,
+          z: fs.pitch.pos,
+        })),
+        true
+      )
     }
   })
 
-  return <primitive ref={fishRef} object={uniqueScene} />
+  return <RigidBody ref={fishRef} colliders={'cuboid'} linearDamping={5} angularDamping={5}>
+    <primitive object={uniqueScene} />
+  </RigidBody>
 }
 
 export default Angelfish
