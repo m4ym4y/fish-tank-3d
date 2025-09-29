@@ -3,6 +3,7 @@ import { useFrame } from '@react-three/fiber'
 import type { ThreeElements } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
+import {euler, quat, RapierRigidBody, RigidBody, useRapier, vec3} from '@react-three/rapier'
 
 const gAccel = -0.1
 const vAngular = 0.5
@@ -17,8 +18,9 @@ function clamp(min: number, max: number, val: number) {
 function Guppy() {
   const { scene } = useGLTF('/models/guppy.glb')
   const uniqueScene = useMemo(() => scene.clone(), [scene])
+  const { world } = useRapier()
 
-  const fishRef = useRef<ThreeElements['primitive'] | null>(null)
+  const fishRef = useRef<RapierRigidBody | null>(null)
   const fishState = useRef<any>({
     targetY: 0,
     targetAngle: 0,
@@ -34,9 +36,14 @@ function Guppy() {
 
     if (fishRef && fishRef.current) {
       const fs = fishState.current
+      const fishPos = vec3(fishRef.current.translation())
+
+      if (fishRef.current.numColliders() === 0) {
+        return
+      }
 
       // vertical movement behavior
-      const aYFactor = clamp(1, 3, Math.abs(fishRef.current.position.y - fs.targetY))
+      const aYFactor = clamp(1, 3, Math.abs(fishPos.y - fs.targetY))
       fs.t += delta
       fs.vY += (gAccel + fs.aY ) * delta * aYFactor
       fs.aY *= Math.max((1 - delta), 0)
@@ -46,7 +53,7 @@ function Guppy() {
 
       // bobbing behavior
       if (
-        fishRef.current.position.y < fs.targetY
+        fishPos.y < fs.targetY
         && fs.aY <= 0.1
         && fs.vY <= 0
       ) {
@@ -78,18 +85,45 @@ function Guppy() {
       v.applyAxisAngle(UP, fs.angle)
       v.normalize().multiplyScalar(fs.speed)
 
-      // apply movement behavior
-      fishRef.current.position.y = clamp(-8, 8, fishRef.current.position.y + fs.vY * delta)
-      fishRef.current.position.x = clamp(-8, 8, fishRef.current.position.x + v.x * delta)
-      fishRef.current.position.z = clamp(-8, 8, fishRef.current.position.z + v.z * delta)
+      const nextPos = {
+        x: fishPos.x + v.x * delta,
+        y: fishPos.y + fs.vY * delta,
+        z: fishPos.z + v.z * delta
+      }
 
-      fishRef.current.rotation.z = fs.vY * (Math.PI / 8)
-      fishRef.current.rotation.x = 0
-      fishRef.current.rotation.y = fs.angle + Math.sin(fs.t) / 4
+      const collider = fishRef.current.collider(0)
+      const hit = world.castShape(
+        fishPos,
+        fishRef.current.rotation(),
+        { x: v.x, y: fs.vY, z: v.z },
+        collider.shape,
+        1,
+        0.1,
+        true,
+        undefined,
+        undefined,
+        collider
+      )
+
+      if (!hit) {
+        // apply movement behavior
+        fishRef.current.setNextKinematicTranslation(nextPos)
+      } else {
+        console.log("collision hit!")
+      }
+
+      const rY = fs.angle + Math.sin(fs.t) / 4
+      fishRef.current.setNextKinematicRotation(
+        quat().setFromEuler(euler({
+          x: 0, y: rY, z: fs.vY * (Math.PI / 8)
+        }))
+      )
     }
   })
 
-  return <primitive ref={fishRef} object={uniqueScene} />
+  return <RigidBody ref={fishRef} type="kinematicPosition" colliders="ball">
+    <primitive object={uniqueScene} />
+  </RigidBody>
 }
 
 export default Guppy
