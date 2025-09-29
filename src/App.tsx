@@ -1,6 +1,7 @@
 import { Canvas } from '@react-three/fiber'
 import Tank from './Tank.tsx'
 import Guppy from './Guppy.tsx'
+import Angelfish from './Angelfish.tsx'
 import { OrbitControls, Stats } from '@react-three/drei'
 import * as THREE from 'three'
 
@@ -21,6 +22,9 @@ function App() {
     <Guppy key={6} />
     <Guppy key={7} />
     <Guppy key={8} />
+    <Angelfish key={9} />
+    <Angelfish key={10} />
+    <Angelfish key={11} />
     {/*<color attach="background" args={['black']} />*/}
     <ambientLight intensity={0.5} />
     <pointLight intensity={400} position={[0, 10, 0 ]} />
