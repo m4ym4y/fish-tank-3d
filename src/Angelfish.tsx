@@ -2,6 +2,7 @@ import { useRef, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
+import * as util from './util'
 import {euler, quat, RapierRigidBody, RigidBody} from '@react-three/rapier'
 
 const rotationChangeFrequency = 0.3
@@ -19,6 +20,8 @@ const RIGHT = new THREE.Vector3(0, 0, 1)
 function Angelfish() {
   const { scene } = useGLTF('/models/angelfish.glb')
   const uniqueScene = useMemo(() => scene.clone(), [scene])
+  util.castShadows(scene)
+  util.receiveShadows(scene)
 
   const fishRef = useRef<RapierRigidBody | null>(null)
   const fishState = useRef({

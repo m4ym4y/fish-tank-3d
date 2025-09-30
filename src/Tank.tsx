@@ -1,8 +1,12 @@
 import { useGLTF } from '@react-three/drei'
 import { CuboidCollider, RigidBody } from '@react-three/rapier'
+import * as THREE from 'three'
+import * as util from './util'
 
 function Tank() {
   const { scene } = useGLTF('/models/tank.glb')
+  util.receiveShadows(scene)
+
   return <RigidBody type="fixed" colliders={false}>
     <CuboidCollider args={[1, 10, 10]} position={[-11, 0, 0 ]} />
     <CuboidCollider args={[1, 10, 10]} position={[11, 0, 0 ]} />

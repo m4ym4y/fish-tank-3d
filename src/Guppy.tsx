@@ -2,6 +2,7 @@ import { useRef, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
+import * as util from './util'
 import {euler, quat, RapierRigidBody, RigidBody, vec3} from '@react-three/rapier'
 
 const gAccel = -0.1
@@ -16,6 +17,9 @@ function clamp(min: number, max: number, val: number) {
 function Guppy() {
   const { scene } = useGLTF('/models/guppy.glb')
   const uniqueScene = useMemo(() => scene.clone(), [scene])
+
+  util.castShadows(scene)
+  util.receiveShadows(scene)
 
   const fishRef = useRef<RapierRigidBody | null>(null)
   const fishState = useRef<any>({

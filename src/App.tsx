@@ -4,6 +4,7 @@ import Guppy from './Guppy.tsx'
 import Angelfish from './Angelfish.tsx'
 import Rock from './Rock.tsx'
 import Plant from './Plant.tsx'
+import WaterSurface from './WaterSurface.tsx'
 import { Physics } from '@react-three/rapier'
 import { OrbitControls, Stats } from '@react-three/drei'
 import * as THREE from 'three'
@@ -14,6 +15,7 @@ const angelfishCount = 3
 
 function App() {
   return <Canvas
+    shadows
     style={{ width: '800px', height: '600px' }}
     camera={{ position: [20, 20, 20 ] }}
     onCreated={({ gl }) => {
@@ -23,6 +25,7 @@ function App() {
     <Suspense>
       <Physics>
         <Tank />
+        <WaterSurface />
         <group>
           <Plant key={0} type={0} position={[ 2, -8, 2 ]} scale={1} rotation={Math.PI / 4} />
           <Plant key={1} type={0} position={[ -3, -9, -5 ]} scale={2} rotation={Math.PI / 4} />
@@ -45,7 +48,15 @@ function App() {
         </group>
         {/*<color attach="background" args={['black']} />*/}
         <ambientLight intensity={0.5} />
-        <pointLight intensity={400} position={[0, 10, 0 ]} />
+        <directionalLight
+          intensity={1.5}
+          position={[0, 10, 0 ]}
+          castShadow
+          shadow-mapSize={[ 1024, 1024 ]}
+          shadow-bias={-0.001}
+        >
+          <orthographicCamera attach="shadow-camera" args={[-10, 10, 10, -10]} />
+        </directionalLight>
       </Physics>
     </Suspense>
     <OrbitControls />
