@@ -6,6 +6,7 @@ import * as util from './util'
 function Tank() {
   const { scene } = useGLTF('/models/tank.glb')
   util.receiveShadows(scene)
+  util.disableFog(scene)
 
   return <RigidBody type="fixed" colliders={false}>
     <CuboidCollider args={[1, 10, 10]} position={[-11, 0, 0 ]} />

@@ -48,6 +48,7 @@ function App() {
         </group>
         {/*<color attach="background" args={['black']} />*/}
         <ambientLight intensity={2} />
+        <fog attach="fog" args={['#88eeff', 0, 100]} />
         <directionalLight
           intensity={3.5}
           position={[0, 10, 0 ]}

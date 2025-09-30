@@ -15,3 +15,14 @@ export function receiveShadows(scene: THREE.Group<THREE.Object3DEventMap>) {
     }
   })
 }
+
+export function disableFog(scene: THREE.Group<THREE.Object3DEventMap>) {
+  scene.traverse(child => {
+    const mesh = child as THREE.Mesh
+    if (mesh.isMesh) {
+      const mat = mesh.material as THREE.MeshStandardMaterial
+      if (!mat.fog) return
+      mat.fog = false
+    }
+  })
+}
