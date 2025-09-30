@@ -51,8 +51,7 @@ function WaterSurface() {
   const shaderRef = useRef<THREE.ShaderMaterial | null>(null)
   const timeRef = useRef({ value: 0 })
 
-  const tex = useLoader(TextureLoader, '/textures/difference.png')
-  const tex2 = useLoader(TextureLoader, '/textures/difference2.png')
+  const tex = useLoader(TextureLoader, '/textures/vornoi2.png')
 
   const customDepthMaterial = useMemo(() => {
     const material = new MeshDepthMaterial({
@@ -63,7 +62,7 @@ function WaterSurface() {
     material.onBeforeCompile = shader => {
       Object.assign(shader.uniforms, mainMaterial.uniforms)
       shader.uniforms.uRipplesX.value = tex
-      shader.uniforms.uRipplesZ.value = tex2
+      shader.uniforms.uRipplesZ.value = tex
       /*shader.uniforms.albedo.value = "#88eeff"
       shader.uniforms.threshold.value = 0.5*/
       shader.uniforms.time = timeRef.current
@@ -96,7 +95,7 @@ function WaterSurface() {
       side={THREE.DoubleSide}
       shadowSide={THREE.DoubleSide}
       uRipplesX={tex}
-      uRipplesZ={tex2}
+      uRipplesZ={tex}
       albedo={"#88eeff"}
       transparent
       />

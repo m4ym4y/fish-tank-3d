@@ -15,11 +15,11 @@ const angelfishCount = 3
 
 function App() {
   return <Canvas
-    shadows
+    shadows="variance"
     style={{ width: '800px', height: '600px' }}
     camera={{ position: [20, 20, 20 ] }}
-    onCreated={({ gl }) => {
-      gl.toneMapping = THREE.NoToneMapping
+    gl={{
+      toneMapping: THREE.NoToneMapping,
     }}
   >
     <Suspense>
@@ -47,14 +47,16 @@ function App() {
           {Array(angelfishCount).fill(null).map((_, i) => <Angelfish key={i} />)}
         </group>
         {/*<color attach="background" args={['black']} />*/}
-        <ambientLight intensity={2} />
-        <fog attach="fog" args={['#88eeff', 0, 100]} />
+        <ambientLight intensity={1.0} />
+        {/*<fog attach="fog" args={['#88eeff', 0, 100]} />*/}
         <directionalLight
-          intensity={3.5}
+          intensity={3.0}
           position={[0, 10, 0 ]}
           castShadow
           shadow-mapSize={[ 1024, 1024 ]}
           shadow-bias={-0.001}
+          shadow-intensity={0.5}
+          shadow-radius={10}
         >
           <orthographicCamera attach="shadow-camera" args={[-10, 10, 10, -10]} />
         </directionalLight>
