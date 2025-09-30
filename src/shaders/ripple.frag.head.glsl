@@ -6,6 +6,7 @@ uniform vec2 rippleDirectionX;
 uniform vec2 rippleDirectionZ;
 uniform float timeScale;
 uniform float time;
+uniform float threshold;
 
 varying vec3 vWorldPosition;
 varying vec2 vUv;

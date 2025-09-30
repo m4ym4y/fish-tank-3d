@@ -3,12 +3,24 @@ import * as THREE from 'three'
 import { useLoader, extend, useFrame } from '@react-three/fiber'
 import { TextureLoader } from 'three'
 
-import vertexShader from './shaders/ripple.vert.glsl?raw'
-import fragmentShader from './shaders/ripple.frag.glsl?raw'
 import vertexShaderBody from './shaders/ripple.vert.body.glsl?raw'
 import fragmentShaderBody from './shaders/ripple.frag.body.glsl?raw'
 import vertexShaderHead from './shaders/ripple.vert.head.glsl?raw'
 import fragmentShaderHead from './shaders/ripple.frag.head.glsl?raw'
+
+const vertexShader = `
+  ${vertexShaderHead}
+  void main() {
+    ${vertexShaderBody}
+  }
+`
+
+const fragmentShader = `
+  ${fragmentShaderHead}
+  void main() {
+    ${fragmentShaderBody}
+  }
+`
 
 import {useEffect, useMemo, useRef} from 'react'
 import {MeshDepthMaterial} from 'three'
@@ -16,6 +28,7 @@ import {MeshDepthMaterial} from 'three'
 const RippleMaterial = shaderMaterial({
   time: 0,
   timeScale: 0.025,
+  threshold: 0.5,
   albedo: new THREE.Color(),
   uRipplesX: new THREE.Texture(),
   uRipplesZ: new THREE.Texture(),
@@ -40,9 +53,7 @@ function WaterSurface() {
   const tex = useLoader(TextureLoader, '/textures/vornoi.png')
   const customDepthMaterial = useMemo(() => {
     const material = new MeshDepthMaterial({
-      depthPacking: THREE.RGBADepthPacking,
-      alphaMap: tex,
-      alphaTest: 0.5,
+      depthPacking: THREE.RGBADepthPacking
     })
 
     const mainMaterial = new RippleMaterial()
@@ -51,6 +62,7 @@ function WaterSurface() {
       shader.uniforms.uRipplesX.value = tex
       shader.uniforms.uRipplesZ.value = tex
       shader.uniforms.albedo.value = "#88eeff"
+      shader.uniforms.threshold.value = 0.5
       shader.uniforms.time = timeRef.current
 
       shader.vertexShader = vertexShaderHead + shader.vertexShader
@@ -74,7 +86,7 @@ function WaterSurface() {
     }
   })
 
-  return <mesh position={[0, 9.89, 0 ]} rotation={[-Math.PI / 2, 0, 0 ]} castShadow customDepthMaterial={customDepthMaterial}>
+  return <mesh position={[0, 9.7, 0 ]} rotation={[-Math.PI / 2, 0, 0 ]} castShadow customDepthMaterial={customDepthMaterial}>
     <planeGeometry args={[20, 20]} />
     <rippleMaterial
       ref={shaderRef}
