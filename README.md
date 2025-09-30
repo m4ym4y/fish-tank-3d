@@ -18,7 +18,7 @@ The goal for this is to have an editor where you can make a fish tank, and then 
 - [x] collisions
 - [x] multiple types of fish
 - [ ] add animations to fish models
-- [ ] better water shader
+- [x] better water shader
 - [ ] editor
 - [ ] embed with settings in url
 - [ ] customize color of fish/props?
