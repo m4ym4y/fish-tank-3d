@@ -47,9 +47,9 @@ function App() {
           {Array(angelfishCount).fill(null).map((_, i) => <Angelfish key={i} />)}
         </group>
         {/*<color attach="background" args={['black']} />*/}
-        <ambientLight intensity={0.5} />
+        <ambientLight intensity={2} />
         <directionalLight
-          intensity={1.5}
+          intensity={3.5}
           position={[0, 10, 0 ]}
           castShadow
           shadow-mapSize={[ 1024, 1024 ]}
