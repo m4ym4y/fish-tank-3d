@@ -2,12 +2,12 @@ import { useGLTF } from '@react-three/drei'
 import * as util from './util'
 import Fish from './Fish'
 
-function Guppy() {
-  const { scene } = useGLTF('/models/guppy.glb')
+function Goldfish() {
+  const { scene } = useGLTF('/models/goldfish.glb')
   util.castShadows(scene)
   util.receiveShadows(scene)
 
   return <Fish scene={scene} />
 }
 
-export default Guppy
+export default Goldfish

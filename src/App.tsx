@@ -4,6 +4,7 @@ import Guppy from './Guppy.tsx'
 import Angelfish from './Angelfish.tsx'
 import Rock from './Rock.tsx'
 import Plant from './Plant.tsx'
+import Goldfish from './Goldfish.tsx'
 import WaterSurface from './WaterSurface.tsx'
 import { Physics } from '@react-three/rapier'
 import { OrbitControls, Stats } from '@react-three/drei'
@@ -12,6 +13,7 @@ import { Suspense } from 'react'
 
 const guppyCount = 10
 const angelfishCount = 3
+const goldfishCount = 6
 
 function App() {
   return <Canvas
@@ -45,6 +47,9 @@ function App() {
         </group>
         <group>
           {Array(angelfishCount).fill(null).map((_, i) => <Angelfish key={i} />)}
+        </group>
+        <group>
+          {Array(goldfishCount).fill(null).map((_, i) => <Goldfish key={i} />)}
         </group>
         {/*<color attach="background" args={['black']} />*/}
         <ambientLight intensity={1.0} />
