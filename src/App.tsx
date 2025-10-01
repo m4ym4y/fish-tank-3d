@@ -18,7 +18,7 @@ const goldfishCount = 6
 function App() {
   return <Canvas
     shadows="variance"
-    camera={{ position: [20, 20, 20 ] }}
+    camera={{ position: [0, 5, 42], fov: 30 }}
     gl={{
       toneMapping: THREE.NoToneMapping,
     }}
