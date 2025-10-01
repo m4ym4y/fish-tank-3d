@@ -28,6 +28,7 @@ import {MeshDepthMaterial} from 'three'
 const RippleMaterial = shaderMaterial({
   time: 0,
   timeScale: 0.025,
+  textureScale: 2,
   threshold: 0.5,
   albedo: new THREE.Color(),
   uRipplesX: new THREE.Texture(),

@@ -5,6 +5,7 @@ uniform vec3 albedo;
 uniform vec2 rippleDirectionX;
 uniform vec2 rippleDirectionZ;
 uniform float timeScale;
+uniform float textureScale;
 uniform float time;
 uniform float threshold;
 
