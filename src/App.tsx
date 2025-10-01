@@ -50,7 +50,7 @@ function App() {
         <group>
           {Array(goldfishCount).fill(null).map((_, i) => <Goldfish key={i} />)}
         </group>
-        {/*<color attach="background" args={['black']} />*/}
+        <color attach="background" args={['black']} />
         <ambientLight intensity={0.3} />
         {/*<fog attach="fog" args={['#88eeff', 0, 100]} />*/}
         <directionalLight
