@@ -51,16 +51,16 @@ function App() {
           {Array(goldfishCount).fill(null).map((_, i) => <Goldfish key={i} />)}
         </group>
         {/*<color attach="background" args={['black']} />*/}
-        <ambientLight intensity={1.0} />
+        <ambientLight intensity={0.3} />
         {/*<fog attach="fog" args={['#88eeff', 0, 100]} />*/}
         <directionalLight
-          intensity={3.0}
+          intensity={4.0}
           position={[0, 10, 0 ]}
           castShadow
           shadow-mapSize={[ 1024, 1024 ]}
           shadow-bias={-0.001}
           shadow-intensity={0.5}
-          shadow-radius={10}
+          shadow-radius={20}
         >
           <orthographicCamera attach="shadow-camera" args={[-10, 10, 10, -10]} />
         </directionalLight>

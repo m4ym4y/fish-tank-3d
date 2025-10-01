@@ -29,7 +29,7 @@ const RippleMaterial = shaderMaterial({
   time: 0,
   timeScale: 0.025,
   textureScale: 2,
-  threshold: 0.5,
+  threshold: 0.55,
   albedo: new THREE.Color(),
   uRipplesX: new THREE.Texture(),
   uRipplesZ: new THREE.Texture(),
@@ -97,7 +97,7 @@ function WaterSurface() {
       shadowSide={THREE.DoubleSide}
       uRipplesX={tex}
       uRipplesZ={tex}
-      albedo={"#88eeff"}
+      albedo={"#ffffff"}
       transparent
       />
     {/*<meshStandardMaterial color={"#55ccff"} alphaMap={tex} alphaTest={0.53} side={THREE.DoubleSide} shadowSide={THREE.DoubleSide}/>*/}
