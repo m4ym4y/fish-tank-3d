@@ -1,5 +1,4 @@
-import { Bloom, EffectComposer, GodRays, Outline, Pixelation, Scanline, Vignette } from '@react-three/postprocessing'
-import { useRef, useState, useEffect } from 'react'
+import { useRef } from 'react'
 import * as THREE from 'three'
 
 function Sun() {

@@ -1,4 +1,4 @@
-import { MeshRefractionMaterial, shaderMaterial } from '@react-three/drei'
+import { shaderMaterial } from '@react-three/drei'
 import * as THREE from 'three'
 import { useLoader, extend, useFrame } from '@react-three/fiber'
 import { TextureLoader } from 'three'
@@ -22,7 +22,7 @@ const fragmentShader = `
   }
 `
 
-import {useEffect, useMemo, useRef} from 'react'
+import {useMemo, useRef} from 'react'
 import {MeshDepthMaterial} from 'three'
 
 const RippleMaterial = shaderMaterial({
