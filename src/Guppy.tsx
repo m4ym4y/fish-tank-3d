@@ -1,18 +1,7 @@
-import { useGLTF } from '@react-three/drei'
-import * as util from './util'
-import Fish from './Fish'
-import {useMemo} from 'react'
+import AnimatedFish from './AnimatedFish'
 
 function Guppy() {
-  const { scene } = useGLTF('/models/guppy.glb')
-  const uniqueScene = useMemo(() => scene.clone(), [scene])
-  
-  util.castShadows(scene)
-  util.receiveShadows(scene)
-
-  return <Fish>
-    <primitive object={uniqueScene} />
-  </Fish>
+  return <AnimatedFish model="/models/guppy.glb" />
 }
 
 export default Guppy
