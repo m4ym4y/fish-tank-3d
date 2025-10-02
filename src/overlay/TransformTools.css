@@ -1,0 +1,12 @@
+.overlay-transform-tools {
+  width: 150px;
+  border-right: 2px solid white;
+  padding: 5px;
+  font-size: 14px;
+  text-align: center;
+  color: white;
+}
+
+.overlay-transform-tools input {
+  max-width: 80px;
+}

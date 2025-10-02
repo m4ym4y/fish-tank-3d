@@ -1,5 +1,6 @@
 import {useState} from 'react'
 import './Toolbar.css'
+import TransformTools from './TransformTools.tsx'
 import Counter from './Counter'
 
 import {
@@ -53,9 +54,11 @@ function FishTool({ name, id, value, onCount }: {
 
 function Toolbar() {
   const [ category, setCategory ] = useState("props")
-  const selected = useAppSelector(state => state.editor.selected)
-  const fishState = useAppSelector(state => state.editor.arrangement.fish)
   const dispatch = useAppDispatch()
+  const appState = useAppSelector(state => ({
+    selected: state.editor.selected,
+    fish: state.editor.arrangement.fish
+  }))
 
   return <div className="overlay-toolbar">
     <div className="overlay-bar-type">
@@ -63,13 +66,14 @@ function Toolbar() {
       <button onClick={() => setCategory("props")}>Decorations</button>
       <button onClick={() => dispatch(clearArrangement())}>Clear</button>
     </div>
+    <TransformTools />
     <div className="overlay-tools">
       {category === "fish" && fishList.map((fish, idx) => 
         <FishTool
           key={idx}
           id={fish.id}
           name={fish.name}
-          value={fishState[fish.id]}
+          value={appState.fish[fish.id]}
           onCount={(val: number) => dispatch(setFishAmount({
             type: fish.id,
             amount: val
@@ -79,7 +83,7 @@ function Toolbar() {
           key={idx}
           id={prop.id}
           name={prop.name}
-          selected={prop.id === selected.name + String(selected.type)}
+          selected={prop.id === appState.selected.name + String(appState.selected.type)}
           onClick={() => dispatch(selectProp(prop.selector))} />)}
     </div>
   </div>

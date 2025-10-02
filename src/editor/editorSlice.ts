@@ -15,6 +15,10 @@ export const editorSlice = createSlice({
   name: 'editor',
   initialState: {
     arrangement: defaultArrangement,
+    transform: {
+      scale: 1,
+      rotationDegrees: 0,
+    },
     selected: {
       name: 'rock',
       type: 0,
@@ -33,8 +37,18 @@ export const editorSlice = createSlice({
     addProp: (state, action: PayloadAction<Omit<Omit<ArrangementProp, 'name'>, 'type'>>) => {
       state.arrangement.props.push({
         ...state.selected,
+        scale: state.transform.scale,
+        rotation: state.transform.rotationDegrees * ((2 * Math.PI) / 360),
         ...action.payload
       })
+    },
+
+    setPropScale: (state, action: PayloadAction<number>) => {
+      state.transform.scale = action.payload
+    },
+
+    setPropRotation: (state, action: PayloadAction<number>) => {
+      state.transform.rotationDegrees = action.payload
     },
 
     clearArrangement: (state) => {
@@ -43,5 +57,5 @@ export const editorSlice = createSlice({
   }
 })
 
-export const { setFishAmount, selectProp, addProp, clearArrangement } = editorSlice.actions
+export const { setFishAmount, selectProp, addProp, clearArrangement, setPropScale, setPropRotation } = editorSlice.actions
 export default editorSlice.reducer
