@@ -17,8 +17,9 @@ The goal for this is to have an editor where you can make a fish tank, and then 
 - [x] add static props / plants
 - [x] collisions
 - [x] multiple types of fish
-- [ ] add animations to fish models
+- [x] add animations to fish models
 - [x] better water shader
+- [ ] bubble particles from plants
 - [ ] editor
 - [ ] embed with settings in url
 - [ ] customize color of fish/props?
