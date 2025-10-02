@@ -7,11 +7,12 @@ import Plant from './Plant.tsx'
 import Goldfish from './Goldfish.tsx'
 import WaterSurface from './WaterSurface.tsx'
 import { Physics } from '@react-three/rapier'
-import { OrbitControls, Stats } from '@react-three/drei'
+import { Box, OrbitControls, Stats } from '@react-three/drei'
 import * as THREE from 'three'
-import { Suspense } from 'react'
+import { Suspense, useState } from 'react'
 import queryString from 'query-string'
 import { Pixelation, EffectComposer } from '@react-three/postprocessing'
+import Editor from './editor/index.tsx'
 
 const guppyCount = 10
 const angelfishCount = 3
@@ -41,29 +42,7 @@ function App() {
         </EffectComposer>}
         <Tank />
         <WaterSurface />
-        <group>
-          <Plant key={0} type={0} position={[ 2, -8, 2 ]} scale={1} rotation={Math.PI / 4} />
-          <Plant key={1} type={0} position={[ -3, -9, -5 ]} scale={2} rotation={Math.PI / 4} />
-          <Plant key={2} type={0} position={[ 3, -9, 6 ]} scale={0.6} rotation={2 * Math.PI / 3} />
-          <Plant key={3} type={1} position={[ 2, -9, 5 ]} scale={2} rotation={Math.PI / 3} />
-          <Plant key={4} type={1} position={[ 7, -9, 1 ]} scale={3} rotation={2 * Math.PI / 3} />
-          <Plant key={5} type={1} position={[ -5, -9, 5 ]} scale={2.5} rotation={0} />
-          <Plant key={6} type={1} position={[ -4, -9, -6 ]} scale={4} rotation={Math.PI / 2} />
-        </group>
-        <group>
-          <Rock key={0} type={0} position={[ 0, -7, 0 ]} scale={5} rotation={0} />
-          <Rock key={1} type={1} position={[ 6, -8, 2 ]} scale={3} rotation={Math.PI / 4} />
-          <Rock key={2} type={2} position={[ 3, -9, -4 ]} scale={3} rotation={Math.PI / 4} />
-        </group>
-        <group>
-          {Array(guppyCount).fill(null).map((_, i) => <Guppy key={i} />)}
-        </group>
-        <group>
-          {Array(angelfishCount).fill(null).map((_, i) => <Angelfish key={i} />)}
-        </group>
-        <group>
-          {Array(goldfishCount).fill(null).map((_, i) => <Goldfish key={i} />)}
-        </group>
+        <Editor edit />
         <color attach="background" args={[bgColor]} />
         <ambientLight intensity={0.3} />
         {/*<fog attach="fog" args={['#88eeff', 0, 100]} />*/}

@@ -15,7 +15,7 @@ function Tank() {
     <CuboidCollider args={[12, 10, 1]} position={[0, 0, 11 ]} />
     <CuboidCollider args={[12, 1, 12]} position={[0, 11, 0 ]} />
     <CuboidCollider args={[12, 1, 12]} position={[0, -10, 0 ]} />
-    <primitive object={scene} />
+    <primitive object={scene}/>
   </RigidBody>
 }
 
