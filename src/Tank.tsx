@@ -8,16 +8,6 @@ function Tank() {
   util.receiveShadows(scene)
   util.disableFog(scene)
 
-  scene.traverse(child => {
-    const mesh = child as THREE.Mesh
-    if (mesh.isMesh) {
-      const mat = mesh.material as THREE.MeshStandardMaterial
-      if (mat.name === 'Material') {
-        mat.emissive.set('#80D8FF')
-      }
-    }
-  })
-
   return <RigidBody type="fixed" colliders={false}>
     <CuboidCollider args={[1, 10, 10]} position={[-11, 0, 0 ]} />
     <CuboidCollider args={[1, 10, 10]} position={[11, 0, 0 ]} />
