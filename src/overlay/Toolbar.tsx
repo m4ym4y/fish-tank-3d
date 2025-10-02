@@ -6,7 +6,8 @@ import Counter from './Counter'
 import {
   setFishAmount,
   selectProp,
-  clearArrangement
+  clearArrangement,
+  setCategory,
 } from '../editor/editorSlice'
 import { useAppSelector, useAppDispatch } from '../state/hooks.ts'
 
@@ -53,27 +54,25 @@ function FishTool({ name, id, value, onCount }: {
 }
 
 function Toolbar() {
-  const [ category, setCategory ] = useState("props")
   const dispatch = useAppDispatch()
-  const appState = useAppSelector(state => ({
-    selected: state.editor.selected,
-    fish: state.editor.arrangement.fish
-  }))
+  const selected = useAppSelector(state => state.editor.selected)
+  const category = useAppSelector(state => state.editor.category)
+  const fishState = useAppSelector(state => state.editor.arrangement.fish)
 
   return <div className="overlay-toolbar">
     <div className="overlay-bar-type">
-      <button onClick={() => setCategory("fish")}>Fish</button>
-      <button onClick={() => setCategory("props")}>Decorations</button>
+      <button onClick={() => dispatch(setCategory("fish"))}>Fish</button>
+      <button onClick={() => dispatch(setCategory("props"))}>Decorations</button>
       <button onClick={() => dispatch(clearArrangement())}>Clear</button>
     </div>
-    <TransformTools />
+    { category === "props" && <TransformTools /> }
     <div className="overlay-tools">
       {category === "fish" && fishList.map((fish, idx) => 
         <FishTool
           key={idx}
           id={fish.id}
           name={fish.name}
-          value={appState.fish[fish.id]}
+          value={fishState[fish.id]}
           onCount={(val: number) => dispatch(setFishAmount({
             type: fish.id,
             amount: val
@@ -83,7 +82,7 @@ function Toolbar() {
           key={idx}
           id={prop.id}
           name={prop.name}
-          selected={prop.id === appState.selected.name + String(appState.selected.type)}
+          selected={prop.id === selected.name + String(selected.type)}
           onClick={() => dispatch(selectProp(prop.selector))} />)}
     </div>
   </div>

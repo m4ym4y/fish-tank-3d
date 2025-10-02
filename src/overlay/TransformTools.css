@@ -1,5 +1,6 @@
 .overlay-transform-tools {
-  width: 150px;
+  min-width: 160px;
+  max-width: 160px;
   border-right: 2px solid white;
   padding: 5px;
   font-size: 14px;
@@ -7,6 +8,19 @@
   color: white;
 }
 
+.overlay-transform-tools label {
+  padding-right: 5px;
+  padding-left: 5px;
+}
+
 .overlay-transform-tools input {
   max-width: 80px;
+  display: block;
+  margin: auto;
+}
+
+.overlay-transform-rotation {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: none;
 }

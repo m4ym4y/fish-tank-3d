@@ -9,9 +9,10 @@ import Goldfish from '../Goldfish.tsx'
 
 import type { Arrangement } from '../Arrangement.ts'
 import {
-  addProp
+  addProp,
 } from './editorSlice.ts'
 import { useAppSelector, useAppDispatch } from '../state/hooks.ts'
+import type {ThreeEvent} from '@react-three/fiber'
 
 const fishMap: {
   [key: string]: () => ReactElement
@@ -49,9 +50,9 @@ function Editor({
   const arrangement = useAppSelector(state => state.editor.arrangement)
   const dispatch = useAppDispatch()
 
-  const onTankClick = (ev: any) => {
+  const onTankClick = (ev: ThreeEvent<MouseEvent>) => {
     dispatch(addProp({
-      pos: ev.point
+      pos: [ev.point.x, -8.5, ev.point.z]
     }))
   }
 
