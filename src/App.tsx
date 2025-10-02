@@ -10,15 +10,24 @@ import { Physics } from '@react-three/rapier'
 import { OrbitControls, Stats } from '@react-three/drei'
 import * as THREE from 'three'
 import { Suspense } from 'react'
+import queryString from 'query-string'
 
 const guppyCount = 10
 const angelfishCount = 3
 const goldfishCount = 6
 
+function getQParam(qParams: queryString.ParsedQuery, key: string): string | null {
+  return Array.isArray(qParams.key) ? qParams.key[0] : qParams.key
+}
+
 function App() {
+  const qParams = queryString.parse(location.search)
+  const bgColor = getQParam(qParams, 'color') || 'white'
+  const fov = Number(getQParam(qParams, 'fov')) || 50
+
   return <Canvas
     shadows="variance"
-    camera={{ position: [0, 5, 42], fov: 30 }}
+    camera={{ position: [0, 5, 42], fov }}
     gl={{
       toneMapping: THREE.NoToneMapping,
     }}
@@ -50,7 +59,7 @@ function App() {
         <group>
           {Array(goldfishCount).fill(null).map((_, i) => <Goldfish key={i} />)}
         </group>
-        <color attach="background" args={['black']} />
+        <color attach="background" args={[bgColor]} />
         <ambientLight intensity={0.3} />
         {/*<fog attach="fog" args={['#88eeff', 0, 100]} />*/}
         <directionalLight
