@@ -1,0 +1,19 @@
+.overlay-counter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 10px;
+  font-size: 12px;
+}
+
+.overlay-counter div {
+  margin-left: 10px;
+  margin-right: 10px;
+  width: 15px;
+}
+
+.overlay-counter button {
+  font-size: 12px;
+  height: 16px;
+  line-height: 10px;
+}

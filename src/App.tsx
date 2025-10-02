@@ -1,32 +1,21 @@
 import { Canvas } from '@react-three/fiber'
 import Tank from './Tank.tsx'
-import Guppy from './Guppy.tsx'
-import Angelfish from './Angelfish.tsx'
-import Rock from './Rock.tsx'
-import Plant from './Plant.tsx'
-import Goldfish from './Goldfish.tsx'
 import WaterSurface from './WaterSurface.tsx'
 import { Physics } from '@react-three/rapier'
-import { Box, OrbitControls, Stats } from '@react-three/drei'
+import { OrbitControls, Stats } from '@react-three/drei'
 import * as THREE from 'three'
-import { Suspense, useState } from 'react'
+import { Suspense } from 'react'
 import queryString from 'query-string'
 import { Pixelation, EffectComposer } from '@react-three/postprocessing'
 import Editor from './editor/index.tsx'
-
-const guppyCount = 10
-const angelfishCount = 3
-const goldfishCount = 6
-
-function getQParam(qParams: queryString.ParsedQuery, key: string): string | null {
-  return Array.isArray(qParams[key]) ? qParams[key][0] : qParams[key]
-}
+import * as util from './util'
 
 function App() {
   const qParams = queryString.parse(location.search)
-  const bgColor = getQParam(qParams, 'color') || 'white'
-  const fov = Number(getQParam(qParams, 'fov')) || 50
-  const pixelation = Number(getQParam(qParams, 'pixelate')) || 0
+  const bgColor = util.getQParam(qParams, 'color') || 'white'
+  const fov = Number(util.getQParam(qParams, 'fov')) || 50
+  const pixelation = Number(util.getQParam(qParams, 'pixelate')) || 0
+  const viewMode = util.getQParam(qParams, "view") 
 
   return <Canvas
     shadows="variance"
@@ -42,10 +31,9 @@ function App() {
         </EffectComposer>}
         <Tank />
         <WaterSurface />
-        <Editor edit />
+        <Editor edit={!viewMode} />
         <color attach="background" args={[bgColor]} />
         <ambientLight intensity={0.3} />
-        {/*<fog attach="fog" args={['#88eeff', 0, 100]} />*/}
         <directionalLight
           intensity={4.0}
           position={[0, 10, 0 ]}

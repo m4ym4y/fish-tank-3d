@@ -1,4 +1,5 @@
 import * as THREE from 'three'
+import queryString from 'query-string'
 
 export function castShadows(scene: THREE.Group<THREE.Object3DEventMap>) {
   scene.traverse(child => {
@@ -26,3 +27,8 @@ export function disableFog(scene: THREE.Group<THREE.Object3DEventMap>) {
     }
   })
 }
+
+export function getQParam(qParams: queryString.ParsedQuery, key: string): string | null {
+  return Array.isArray(qParams[key]) ? qParams[key][0] : qParams[key]
+}
+
