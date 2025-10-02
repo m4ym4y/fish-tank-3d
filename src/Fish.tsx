@@ -1,7 +1,9 @@
-import { useRef, useMemo } from 'react'
+import { useRef, useMemo, Children } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { euler, quat, RapierRigidBody, RigidBody, vec3 } from '@react-three/rapier'
 import * as THREE from 'three'
+import {useAnimations} from '@react-three/drei'
+import * as SkeletonUtils from 'three/examples/jsm/utils/SkeletonUtils.js'
 
 const gAccel = -0.1
 const vAngular = 0.5
@@ -12,8 +14,12 @@ function clamp(min: number, max: number, val: number) {
   return Math.max(min, Math.min(max, val))
 }
 
-function Fish({ scene }: { scene: THREE.Group<THREE.Object3DEventMap> }) {
-  const uniqueScene = useMemo(() => scene.clone(), [scene])
+function Fish({ 
+  onDirectionChange,
+  children 
+}: React.PropsWithChildren & {
+  onDirectionChange?: () => void
+}) {
   const fishRef = useRef<RapierRigidBody | null>(null)
   const fishState = useRef<any>({
     targetY: 0,
@@ -56,6 +62,10 @@ function Fish({ scene }: { scene: THREE.Group<THREE.Object3DEventMap> }) {
         fs.targetAngle = Math.random() * Math.PI * 2
         fs.targetY = Math.random() * 18 - 9
         fs.speed = Math.random() * 4
+
+        if (onDirectionChange) {
+          onDirectionChange()
+        }
       }
 
       if ((angleDiff < 0 && angleDiff > -Math.PI) || angleDiff > Math.PI) {
@@ -87,7 +97,7 @@ function Fish({ scene }: { scene: THREE.Group<THREE.Object3DEventMap> }) {
   })
 
   return <RigidBody ref={fishRef} colliders={"cuboid"} linearDamping={5} angularDamping={5}>
-    <primitive object={uniqueScene} />
+    {children}
   </RigidBody>
 }
 

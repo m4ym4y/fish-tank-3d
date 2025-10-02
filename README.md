@@ -3,7 +3,7 @@
 
 A virtual fish tank made in three.js using react-three-fiber. Started from the [vite typescript react template](https://vite.dev/).
 
-```
+```sh
 npm install
 npm run dev
 ```
