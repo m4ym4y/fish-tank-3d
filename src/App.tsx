@@ -11,10 +11,11 @@ import { OrbitControls, Stats } from '@react-three/drei'
 import * as THREE from 'three'
 import { Suspense } from 'react'
 import queryString from 'query-string'
+import { Pixelation, EffectComposer } from '@react-three/postprocessing'
 
 const guppyCount = 10
 const angelfishCount = 3
-const goldfishCount = 1
+const goldfishCount = 6
 
 function getQParam(qParams: queryString.ParsedQuery, key: string): string | null {
   return Array.isArray(qParams[key]) ? qParams[key][0] : qParams[key]
@@ -24,6 +25,7 @@ function App() {
   const qParams = queryString.parse(location.search)
   const bgColor = getQParam(qParams, 'color') || 'white'
   const fov = Number(getQParam(qParams, 'fov')) || 50
+  const pixelation = Number(getQParam(qParams, 'pixelate')) || 0
 
   return <Canvas
     shadows="variance"
@@ -34,6 +36,9 @@ function App() {
   >
     <Suspense>
       <Physics>
+        {pixelation && <EffectComposer>
+          <Pixelation granularity={pixelation} />
+        </EffectComposer>}
         <Tank />
         <WaterSurface />
         <group>
