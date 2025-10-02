@@ -1,6 +1,6 @@
 import { useGLTF } from '@react-three/drei'
 import type {Vector3} from '@react-three/fiber'
-import {useMemo} from 'react'
+import { useMemo } from 'react'
 import * as util from './util'
 
 function Plant({ type, position, scale, rotation }: {
@@ -12,8 +12,8 @@ function Plant({ type, position, scale, rotation }: {
   const { scene: plant0Scene } = useGLTF('/models/plant0.glb')
   const { scene: plant1Scene } = useGLTF('/models/plant1.glb')
   const plantTypes = [ plant0Scene, plant1Scene ]
+
   plantTypes.forEach(scene => {
-    util.castShadows(scene)
     util.receiveShadows(scene)
   })
 

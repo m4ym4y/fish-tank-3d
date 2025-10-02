@@ -20,7 +20,6 @@ const RIGHT = new THREE.Vector3(0, 0, 1)
 function Angelfish() {
   const { scene } = useGLTF('/models/angelfish.glb')
   const uniqueScene = useMemo(() => scene.clone(), [scene])
-  util.castShadows(scene)
   util.receiveShadows(scene)
 
   const fishRef = useRef<RapierRigidBody | null>(null)

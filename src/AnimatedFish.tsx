@@ -10,7 +10,6 @@ function AnimatedFish({ model }: {
 }) {
   const { scene, animations } = useGLTF(model)
   const uniqueScene = useMemo(() => SkeletonUtils.clone(scene), [ scene ])
-  util.castShadows(scene)
   util.receiveShadows(scene)
 
   const { actions } = useAnimations(animations, uniqueScene)
