@@ -17,7 +17,7 @@ const angelfishCount = 3
 const goldfishCount = 6
 
 function getQParam(qParams: queryString.ParsedQuery, key: string): string | null {
-  return Array.isArray(qParams.key) ? qParams.key[0] : qParams.key
+  return Array.isArray(qParams[key]) ? qParams[key][0] : qParams[key]
 }
 
 function App() {
