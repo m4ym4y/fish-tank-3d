@@ -47,7 +47,7 @@ function ActivePlane() {
 
       if (dist <= 5) {
         dispatch(addProp({
-          pos: [ev.point.x, -8.5, ev.point.z]
+          pos: [ev.point.x, -9, ev.point.z]
         }))
       }
     }
@@ -82,7 +82,7 @@ function ActivePlane() {
       onPointerMove={(ev: ThreeEvent<MouseEvent>) => {
         if (ghostRef.current) {
           ghostRef.current.position.x = ev.point.x
-          ghostRef.current.position.y = -8.5
+          ghostRef.current.position.y = -9
           ghostRef.current.position.z = ev.point.z
         }
       }}
