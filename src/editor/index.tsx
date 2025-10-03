@@ -48,13 +48,6 @@ function Editor({
   edit?: boolean
 }) {
   const arrangement = useAppSelector(state => state.editor.arrangement)
-  const dispatch = useAppDispatch()
-
-  const onTankClick = (ev: ThreeEvent<MouseEvent>) => {
-    dispatch(addProp({
-      pos: [ev.point.x, -8.5, ev.point.z]
-    }))
-  }
 
   return <>
     {/* insert fish from arrangement */}
@@ -83,7 +76,7 @@ function Editor({
 
     {/* editor controls */}
     {edit && <>
-      <ActivePlane onClick={onTankClick} />
+      <ActivePlane />
     </>}
   </>
 }
