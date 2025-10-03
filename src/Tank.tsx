@@ -1,6 +1,5 @@
 import { useGLTF } from '@react-three/drei'
 import { CuboidCollider, RigidBody } from '@react-three/rapier'
-import * as THREE from 'three'
 import * as util from './util'
 
 function Tank() {

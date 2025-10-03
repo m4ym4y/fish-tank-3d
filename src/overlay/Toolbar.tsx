@@ -1,4 +1,3 @@
-import {useState} from 'react'
 import './Toolbar.css'
 import TransformTools from './TransformTools.tsx'
 import Counter from './Counter'

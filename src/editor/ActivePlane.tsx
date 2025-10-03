@@ -24,9 +24,7 @@ const propMap: {
   'plant': Plant
 }
 
-function ActivePlane({ onClick }: {
-  onClick?: (ev: ThreeEvent<MouseEvent>) => void
-}) {
+function ActivePlane() {
   const ghostRef = useRef<THREE.Mesh | null>(null)
   const dispatch = useAppDispatch()
   const mouseDownEvent = useRef<ThreeEvent<MouseEvent> | null>(null)

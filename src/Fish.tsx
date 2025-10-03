@@ -1,9 +1,7 @@
-import { useRef, useMemo, Children } from 'react'
+import { useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { euler, quat, RapierRigidBody, RigidBody, vec3 } from '@react-three/rapier'
 import * as THREE from 'three'
-import {useAnimations} from '@react-three/drei'
-import * as SkeletonUtils from 'three/examples/jsm/utils/SkeletonUtils.js'
 
 const gAccel = -0.1
 const vAngular = 0.5

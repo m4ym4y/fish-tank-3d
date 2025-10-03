@@ -1,4 +1,4 @@
-import { useState, type ReactElement } from 'react'
+import { type ReactElement } from 'react'
 import ActivePlane from './ActivePlane'
 
 import Rock from '../Rock.tsx'
@@ -7,12 +7,8 @@ import Guppy from '../Guppy.tsx'
 import Angelfish from '../Angelfish.tsx'
 import Goldfish from '../Goldfish.tsx'
 
-import type { Arrangement } from '../Arrangement.ts'
-import {
-  addProp,
-} from './editorSlice.ts'
-import { useAppSelector, useAppDispatch } from '../state/hooks.ts'
-import type {ThreeEvent} from '@react-three/fiber'
+import type { Arrangement, ArrangementProp } from '../Arrangement.ts'
+import { useAppSelector } from '../state/hooks.ts'
 
 const fishMap: {
   [key: string]: () => ReactElement
@@ -54,7 +50,7 @@ function Editor({
     {createFishFromArrangement(arrangement)}
 
     {/* insert props from arrangement */}
-    {arrangement.props.map((p, idx) => {
+    {arrangement.props.map((p: ArrangementProp, idx: number) => {
       if (p.name === "plant") {
         return <Plant
           key={"plant" + idx}
