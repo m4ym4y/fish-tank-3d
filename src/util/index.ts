@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import queryString from 'query-string'
+import type { Arrangement } from '../Arrangement'
 
 export function castShadows(scene: THREE.Group<THREE.Object3DEventMap>) {
   scene.traverse(child => {
@@ -26,6 +27,25 @@ export function disableFog(scene: THREE.Group<THREE.Object3DEventMap>) {
       mat.fog = false
     }
   })
+}
+
+export function serializeArrangement(arrangement: Arrangement) {
+  const textEncoder = new TextEncoder()
+  const encoded = textEncoder.encode(JSON.stringify(arrangement))
+  const byteString = String.fromCharCode(...encoded)
+
+  return btoa(byteString)
+    .replaceAll('+', '-')
+    .replaceAll('/', '_')
+}
+
+export function deserializeArrangement(serialized: string) {
+  const byteString = atob(serialized)
+  const encoded = new Uint8Array([...byteString].map(b => b.charCodeAt(0)))
+  const decoder = new TextDecoder('utf8')
+  const decoded = decoder.decode(encoded)
+
+  return JSON.parse(decoded)
 }
 
 export function getQParam(qParams: queryString.ParsedQuery, key: string): string | null {

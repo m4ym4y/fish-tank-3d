@@ -1,5 +1,7 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
-import { defaultArrangement, emptyArrangement, type ArrangementProp } from '../Arrangement'
+import { defaultArrangement, emptyArrangement, type ArrangementProp, type Arrangement } from '../Arrangement'
+import queryString from 'query-string'
+import * as util from '../util'
 
 export interface SetFish {
   type: string
@@ -11,10 +13,24 @@ export interface SelectProp {
   type: number
 }
 
+const qParams = queryString.parse(location.search)
+const arrangementParam = util.getQParam(qParams, "arrangement")
+const startingArrangement = arrangementParam
+  ? util.deserializeArrangement(arrangementParam)
+  : defaultArrangement
+
+function updateUrlArrangement(arrangement: Arrangement) {
+  const urlParsed = URL.parse(location.href) as URL
+  const qParams = queryString.parse(location.search)
+  qParams.arrangement = util.serializeArrangement(arrangement)
+  urlParsed.search = queryString.stringify(qParams)
+  history.pushState({}, "", urlParsed.href)
+}
+
 export const editorSlice = createSlice({
   name: 'editor',
   initialState: {
-    arrangement: defaultArrangement,
+    arrangement: startingArrangement,
     transform: {
       scale: 1,
       rotationDegrees: 0,
@@ -43,6 +59,8 @@ export const editorSlice = createSlice({
         rotation: state.transform.rotationDegrees * ((2 * Math.PI) / 360),
         ...action.payload
       })
+
+      updateUrlArrangement(state.arrangement)
     },
 
     setPropScale: (state, action: PayloadAction<number>) => {
