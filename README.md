@@ -10,7 +10,7 @@ npm run dev
 
 The goal for this is to have an editor where you can make a fish tank, and then create an embed you can put on your website.
 
-![screenshot of early fish tank build](./public/screenshots/tank1.png)
+![screenshot of fish tank editor](./public/screenshots/tank2.png)
 
 ## Roadmap
 
@@ -20,7 +20,7 @@ The goal for this is to have an editor where you can make a fish tank, and then 
 - [x] add animations to fish models
 - [x] better water shader
 - [ ] bubble particles from plants
-- [ ] editor
+- [x] editor
 - [ ] embed with settings in url
 - [ ] customize color of fish/props?
 - [ ] click to feed fish
