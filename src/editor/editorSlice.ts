@@ -13,11 +13,13 @@ export interface SelectProp {
   type: number
 }
 
-const qParams = queryString.parse(location.search)
-const arrangementParam = util.getQParam(qParams, "arrangement")
-const startingArrangement = arrangementParam
-  ? util.deserializeArrangement(arrangementParam)
-  : defaultArrangement
+function loadUrlArrangement() {
+  const qParams = queryString.parse(location.search)
+  const arrangementParam = util.getQParam(qParams, "arrangement")
+  return arrangementParam
+    ? util.deserializeArrangement(arrangementParam)
+    : defaultArrangement
+}
 
 function updateUrlArrangement(arrangement: Arrangement) {
   const urlParsed = URL.parse(location.href) as URL
@@ -30,7 +32,7 @@ function updateUrlArrangement(arrangement: Arrangement) {
 export const editorSlice = createSlice({
   name: 'editor',
   initialState: {
-    arrangement: startingArrangement,
+    arrangement: loadUrlArrangement(),
     transform: {
       scale: 1,
       rotationDegrees: 0,
@@ -86,8 +88,12 @@ export const editorSlice = createSlice({
     setCategory: (state, action: PayloadAction<string>) => {
       state.category = action.payload
     },
+
+    loadArrangementFromUrl: (state) => {
+      state.arrangement = loadUrlArrangement()
+    },
   }
 })
 
-export const { setFishAmount, selectProp, addProp, clearArrangement, setPropScale, setPropRotation, changePropScale, changePropRotation, setCategory } = editorSlice.actions
+export const { setFishAmount, selectProp, addProp, clearArrangement, setPropScale, setPropRotation, changePropScale, changePropRotation, setCategory, loadArrangementFromUrl } = editorSlice.actions
 export default editorSlice.reducer
