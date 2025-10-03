@@ -1,5 +1,6 @@
 import './Toolbar.css'
 import TransformTools from './TransformTools.tsx'
+import HistoryTools from './HistoryTools.tsx'
 import Counter from './Counter'
 
 import {
@@ -58,33 +59,38 @@ function Toolbar() {
   const category = useAppSelector(state => state.editor.category)
   const fishState = useAppSelector(state => state.editor.arrangement.fish)
 
-  return <div className="overlay-toolbar">
-    <div className="overlay-bar-type">
-      <button onClick={() => dispatch(setCategory("fish"))}>Fish</button>
-      <button onClick={() => dispatch(setCategory("props"))}>Decorations</button>
-      <button onClick={() => dispatch(clearArrangement())}>Clear</button>
+  return <>
+    <div className="overlay-popup-toolbar">
+      <HistoryTools />
     </div>
-    { category === "props" && <TransformTools /> }
-    <div className="overlay-tools">
-      {category === "fish" && fishList.map((fish, idx) => 
-        <FishTool
-          key={idx}
-          id={fish.id}
-          name={fish.name}
-          value={fishState[fish.id]}
-          onCount={(val: number) => dispatch(setFishAmount({
-            type: fish.id,
-            amount: val
-          }))} />)}
-      {category === "props" && propList.map((prop, idx) =>
-        <PropTool
-          key={idx}
-          id={prop.id}
-          name={prop.name}
-          selected={prop.id === selected.name + String(selected.type)}
-          onClick={() => dispatch(selectProp(prop.selector))} />)}
+    <div className="overlay-toolbar">
+      <div className="overlay-bar-type">
+        <button onClick={() => dispatch(setCategory("fish"))}>Fish</button>
+        <button onClick={() => dispatch(setCategory("props"))}>Decorations</button>
+        <button onClick={() => dispatch(clearArrangement())}>Clear</button>
+      </div>
+      { category === "props" && <TransformTools /> }
+      <div className="overlay-tools">
+        {category === "fish" && fishList.map((fish, idx) => 
+          <FishTool
+            key={idx}
+            id={fish.id}
+            name={fish.name}
+            value={fishState[fish.id]}
+            onCount={(val: number) => dispatch(setFishAmount({
+              type: fish.id,
+              amount: val
+            }))} />)}
+        {category === "props" && propList.map((prop, idx) =>
+          <PropTool
+            key={idx}
+            id={prop.id}
+            name={prop.name}
+            selected={prop.id === selected.name + String(selected.type)}
+            onClick={() => dispatch(selectProp(prop.selector))} />)}
+      </div>
     </div>
-  </div>
+  </>
 }
 
 export default Toolbar

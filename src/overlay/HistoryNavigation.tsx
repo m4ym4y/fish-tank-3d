@@ -1,21 +1,21 @@
+import * as util from '../util'
 import { useEffect } from 'react'
 
 import {
-  loadArrangementFromUrl
+  loadArrangement
 } from '../editor/editorSlice'
 import { useAppDispatch } from '../state/hooks.ts'
 
 function HistoryNavigation() {
   const dispatch = useAppDispatch()
-  const loadArrangement = () => {
-    console.log("Load arrangement from URL")
-    dispatch(loadArrangementFromUrl())
+  const loadArrangementFromUrl = () => {
+    dispatch(loadArrangement(util.loadUrlArrangement()))
   }
 
   useEffect(() => {
-    window.addEventListener('popstate', loadArrangement)
+    window.addEventListener('popstate', loadArrangementFromUrl)
     return () => {
-      window.removeEventListener('popstate', loadArrangement)
+      window.removeEventListener('popstate', loadArrangementFromUrl)
     }
   }, [])
 
