@@ -16,6 +16,7 @@ function App() {
   const fov = Number(util.getQParam(qParams, 'fov')) || 50
   const pixelation = Number(util.getQParam(qParams, 'pixelate')) || 0
   const viewMode = util.getQParam(qParams, "view") 
+  const showStats = util.getQParam(qParams, "stats")
 
   return <Canvas
     shadows="variance"
@@ -48,7 +49,7 @@ function App() {
       </Physics>
     </Suspense>
     <OrbitControls />
-    <Stats />
+    {showStats && <Stats />}
   </Canvas>
 }
 
