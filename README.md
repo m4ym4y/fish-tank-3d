@@ -1,5 +1,6 @@
-# Fish Tank 3d
-> (working title)
+# Maya's Aquarium 3D
+
+### [Visit the live version!](https://aquarium3d.may.as)
 
 A virtual fish tank made in three.js using react-three-fiber. Started from the [vite typescript react template](https://vite.dev/).
 
