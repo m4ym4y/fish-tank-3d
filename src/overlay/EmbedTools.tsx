@@ -41,7 +41,7 @@ function EmbedTools() {
         <div style={{ flexGrow: 1 }} />
         <button onClick={() => setPopupVisible(false)}>X</button>
       </div>
-      <textarea readOnly>{embedText}</textarea>
+      <textarea readOnly value={embedText} />
     </div>
     <button onClick={() => setPopupVisible(!popupVisible)}>Embed</button>
   </div>

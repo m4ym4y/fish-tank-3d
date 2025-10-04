@@ -9,6 +9,9 @@ import { useAppSelector, useAppDispatch } from '../state/hooks.ts'
 
 import Rock from '../Rock.tsx'
 import Plant from '../Plant.tsx'
+import * as util from '../util'
+
+const WHITE = new THREE.Color(1.0, 1.0, 1.0)
 
 interface propParams {
   type: number
@@ -26,6 +29,7 @@ const propMap: {
 
 function ActivePlane() {
   const ghostRef = useRef<THREE.Mesh | null>(null)
+  const matRef = useRef<THREE.MeshStandardMaterial | null>(null)
   const dispatch = useAppDispatch()
   const mouseDownEvent = useRef<ThreeEvent<MouseEvent> | null>(null)
 
@@ -60,15 +64,22 @@ function ActivePlane() {
         if (mesh.isMesh && mesh.material) {
           // im too tired for this rn
           if (Array.isArray(mesh.material)) return
-          const newMat = mesh.material.clone()
+          const newMat = mesh.material.clone() as THREE.MeshStandardMaterial
+          matRef.current = newMat
+
+          if (transform.colorTintEnabled) {
+            newMat.color = util.rgbToThreeColor(transform.colorTint)
+          }
+
           mesh.material = newMat
           mesh.material.opacity = 0.5
           mesh.material.transparent = true
           mesh.material.needsUpdate = true
+
         }
       })
     }
-  }, [ selected, ghostRef ])
+  }, [ selected, ghostRef, transform.colorTint, transform.colorTintEnabled ])
 
   return <>
     <mesh
@@ -80,6 +91,17 @@ function ActivePlane() {
       onPointerOver={() => { if (ghostRef.current) ghostRef.current.visible = true }}
       onPointerOut={() => { if (ghostRef.current) ghostRef.current.visible = false }}
       onPointerMove={(ev: ThreeEvent<MouseEvent>) => {
+        // lazily set color
+        const colorTint = util.rgbToThreeColor(transform.colorTint)
+        if (
+          matRef.current && (
+            matRef.current.color.equals(colorTint) ||
+            (!matRef.current.color.equals(WHITE) && !transform.colorTintEnabled)
+          )
+        ) {
+          matRef.current.color = transform.colorTintEnabled ? colorTint : WHITE 
+        }
+
         if (ghostRef.current) {
           ghostRef.current.position.x = ev.point.x
           ghostRef.current.position.y = -9

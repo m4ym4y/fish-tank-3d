@@ -3,7 +3,12 @@ export interface ArrangementProp {
   type?: number,
   pos: [number, number, number],
   scale?: number,
-  rotation?: number
+  rotation?: number,
+  color?: {
+    r: number,
+    g: number,
+    b: number
+  }
 }
 
 export interface Arrangement {

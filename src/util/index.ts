@@ -18,6 +18,20 @@ export function receiveShadows(scene: THREE.Group<THREE.Object3DEventMap>) {
   })
 }
 
+export function setMaterialColors(scene: THREE.Group<THREE.Object3DEventMap>, color: THREE.Color) {
+  scene.traverse((child) => {
+    const mesh = child as THREE.Mesh
+    if (mesh && mesh.material) {
+      if (Array.isArray(mesh.material)) return
+      const material = mesh.material.clone() as THREE.MeshStandardMaterial
+      if (material.color) {
+        material.color = color
+        mesh.material = material
+      }
+    }
+  })
+}
+
 export function disableFog(scene: THREE.Group<THREE.Object3DEventMap>) {
   scene.traverse(child => {
     const mesh = child as THREE.Mesh
@@ -66,4 +80,8 @@ export function updateUrlArrangement(arrangement: Arrangement) {
   qParams.arrangement = serializeArrangement(arrangement)
   urlParsed.search = queryString.stringify(qParams)
   history.pushState({}, "", urlParsed.href)
+}
+
+export function rgbToThreeColor ({ r, g, b }: { r: number, g: number, b: number }) {
+  return new THREE.Color(r / 256, g / 256, b / 256)
 }

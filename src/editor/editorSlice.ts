@@ -17,6 +17,11 @@ export interface ChangeForwardHistory {
   subtract?: boolean
 }
 
+export interface ChangeColor {
+  color?: { r: number, g: number, b: number },
+  colorTintEnabled: boolean
+}
+
 export const editorSlice = createSlice({
   name: 'editor',
   initialState: {
@@ -26,6 +31,8 @@ export const editorSlice = createSlice({
     transform: {
       scale: 1,
       rotationDegrees: 0,
+      colorTint: { r: 255, g: 0, b: 0 },
+      colorTintEnabled: false
     },
     category: 'props',
     selected: {
@@ -45,12 +52,18 @@ export const editorSlice = createSlice({
 
     addProp: (state, action: PayloadAction<Omit<Omit<ArrangementProp, 'name'>, 'type'>>) => {
       if (state.category !== 'props') return
-      state.arrangement.props.push({
+      const prop = {
         ...state.selected,
         scale: state.transform.scale,
         rotation: state.transform.rotationDegrees * ((2 * Math.PI) / 360),
         ...action.payload
-      })
+      }
+
+      if (state.transform.colorTintEnabled) {
+        prop.color = { ...state.transform.colorTint }
+      }
+
+      state.arrangement.props.push(prop)
     },
 
     setPropScale: (state, action: PayloadAction<number>) => {
@@ -99,9 +112,16 @@ export const editorSlice = createSlice({
         state.historyDepth--
         state.historyForwardDepth++
       }
-    }
+    },
+
+    changeColor: (state, action: PayloadAction<ChangeColor>) => {
+      if (action.payload.color) {
+        state.transform.colorTint = action.payload.color
+      }
+      state.transform.colorTintEnabled = action.payload.colorTintEnabled
+    },
   }
 })
 
-export const { setFishAmount, selectProp, addProp, clearArrangement, setPropScale, setPropRotation, changePropScale, changePropRotation, setCategory, loadArrangement, editorUndo, editorRedo, addHistoryDepth, removeHistoryDepth } = editorSlice.actions
+export const { setFishAmount, selectProp, addProp, clearArrangement, setPropScale, setPropRotation, changePropScale, changePropRotation, setCategory, loadArrangement, editorUndo, editorRedo, addHistoryDepth, removeHistoryDepth, changeColor } = editorSlice.actions
 export default editorSlice.reducer

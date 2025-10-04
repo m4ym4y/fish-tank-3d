@@ -6,6 +6,7 @@ import Plant from '../Plant.tsx'
 import Guppy from '../Guppy.tsx'
 import Angelfish from '../Angelfish.tsx'
 import Goldfish from '../Goldfish.tsx'
+import * as util from '../util'
 
 import type { Arrangement, ArrangementProp } from '../Arrangement.ts'
 import { useAppSelector } from '../state/hooks.ts'
@@ -58,6 +59,7 @@ function Editor({
           position={p.pos}
           scale={p.scale || 1}
           rotation={p.rotation || 0}
+          color={p.color && util.rgbToThreeColor(p.color)}
         />
       } else if (p.name == "rock") {
         return <Rock
@@ -66,6 +68,7 @@ function Editor({
           position={p.pos}
           scale={p.scale || 1}
           rotation={p.rotation || 0}
+          color={p.color && util.rgbToThreeColor(p.color)}
         />
       }
     })}

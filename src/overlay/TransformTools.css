@@ -1,11 +1,70 @@
 .overlay-transform-tools {
-  min-width: 160px;
-  max-width: 160px;
+  min-width: 200px;
+  max-width: 200px;
   border-right: 2px solid white;
   padding: 5px;
   font-size: 14px;
   text-align: center;
   color: white;
+}
+
+.overlay-transform-tools .hint {
+  font-size: 10px;
+}
+
+.overlay-transform-tool-row {
+  display: flex;
+  margin-bottom: 5px;
+  height: 20px;
+}
+
+.overlay-color-shower {
+  width: 40px;
+  border-radius: 5px;
+  height: 20px;
+  box-sizing: border-box;
+  margin-right: 5px;
+  background-color: white;
+  position: relative;
+}
+
+.overlay-color-popup {
+  visibility: hidden;
+  width: 160px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border-radius: 5px;
+  position: absolute;
+  z-index: 6;
+  width: 220px;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -110px;
+  padding: 5px;
+}
+
+.overlay-color-popup.show {
+  visibility: visible;
+}
+
+.overlay-color-popup::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.5) transparent transparent transparent;
+}
+
+.overlay-color-popup-controls {
+  display: flex;
+  margin-bottom: 5px;
+}
+
+.spacer {
+  flex-grow: 1;
 }
 
 .overlay-transform-tools label {
@@ -17,6 +76,11 @@
   max-width: 80px;
   display: block;
   margin: auto;
+  height: 14px;
+}
+
+.overlay-transform-tools button {
+  line-height: 16px;
 }
 
 .overlay-transform-rotation {
