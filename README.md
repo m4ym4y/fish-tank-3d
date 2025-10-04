@@ -1,4 +1,4 @@
-# Maya's Aquarium 3D
+# Maya's Aquarium Maker 3D
 
 ### [Visit the live version!](https://aquarium3d.may.as)
 
