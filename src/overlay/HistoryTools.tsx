@@ -1,5 +1,3 @@
-import './HistoryTools.css'
-
 import {
   editorRedo,
   editorUndo,
@@ -11,7 +9,7 @@ function HistoryTools() {
   const historyDepth = useAppSelector(state => state.editor.historyDepth)
   const dispatch = useAppDispatch()
 
-  return <div className="overlay-history-tools">
+  return <div className="overlay-popup-tool">
     <button
       disabled={historyDepth === 0}
       onClick={() => dispatch(editorUndo())}

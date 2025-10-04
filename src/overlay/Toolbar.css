@@ -19,8 +19,26 @@
   width: 100%;
   display: flex;
   padding: 5px;
+  padding-left: 0px;
   padding-top: 0px;
   box-sizing: border-box;
+}
+
+.overlay-popup-tool {
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 5px;
+  font-size: 12px;
+  padding: 5px;
+  padding-left: 0px;
+  color: white;
+  pointer-events: auto;
+  margin-left: 5px;
+}
+
+.overlay-popup-tool button {
+  max-height: 20px;
+  line-height: 14px;
+  margin-left: 5px;
 }
 
 .overlay-tools {

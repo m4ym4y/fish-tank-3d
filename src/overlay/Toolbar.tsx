@@ -1,6 +1,7 @@
 import './Toolbar.css'
 import TransformTools from './TransformTools.tsx'
 import HistoryTools from './HistoryTools.tsx'
+import EmbedTools from './EmbedTools.tsx'
 import Counter from './Counter'
 
 import {
@@ -62,6 +63,8 @@ function Toolbar() {
   return <>
     <div className="overlay-popup-toolbar">
       <HistoryTools />
+      <EmbedTools />
+      <div style={{ flexGrow: 1 }}></div>
     </div>
     <div className="overlay-toolbar">
       <div className="overlay-bar-type">
