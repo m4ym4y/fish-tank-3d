@@ -1,5 +1,5 @@
 import {useState} from "react"
-import { SketchPicker, type RGBColor } from 'react-color'
+import { SketchPicker } from 'react-color'
 
 import {
   changeColor
