@@ -9,6 +9,8 @@ import {
   addHistoryDepth,
   removeHistoryDepth,
   setFishAmount,
+  deleteProp,
+  clearArrangement
 } from '../editor/editorSlice'
 
 export const historyListenerMiddleware = createListenerMiddleware()
@@ -16,7 +18,7 @@ export const startHistoryListening = historyListenerMiddleware.startListening.wi
 export const addHistoryListener = addListener.withTypes<RootState, AppDispatch>()
 
 startHistoryListening({
-  matcher: isAnyOf(addProp, setFishAmount),
+  matcher: isAnyOf(addProp, setFishAmount, deleteProp, clearArrangement),
   effect: (_action, listenerApi) => {
     util.updateUrlArrangement(listenerApi.getState().editor.arrangement)
     listenerApi.dispatch(addHistoryDepth({ reset: true }))

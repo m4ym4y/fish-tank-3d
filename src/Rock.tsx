@@ -5,13 +5,14 @@ import { useEffect, useMemo } from 'react'
 import * as util from './util'
 import { type Color } from 'three'
 
-function Rock({ type, position, scale, rotation, color, noPhysics }: {
+function Rock({ type, position, scale, rotation, color, noPhysics, onClick }: {
   type: number,
   position: Vector3,
   scale: number,
   rotation: number,
   color?: Color,
-  noPhysics?: boolean
+  noPhysics?: boolean,
+  onClick?: () => void,
 }) {
   const { scene: rock0Scene } = useGLTF('/models/rock0.glb')
   const { scene: rock1Scene } = useGLTF('/models/rock1.glb')
@@ -45,7 +46,7 @@ function Rock({ type, position, scale, rotation, color, noPhysics }: {
       rotation={[0, rotation, 0]}
       collisionGroups={interactionGroups(util.iGroups.STATIC)}
     >
-      <primitive object={uniqueRockScene} />
+      <primitive object={uniqueRockScene} onClick={onClick} />
     </RigidBody>
   }
 }

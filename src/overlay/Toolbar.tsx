@@ -64,13 +64,18 @@ function Toolbar() {
     <div className="overlay-popup-toolbar">
       <HistoryTools />
       <EmbedTools />
+      <div className="overlay-popup-tool">
+        <button onClick={() => dispatch(clearArrangement())}>
+          Clear
+        </button>
+      </div>
       <div style={{ flexGrow: 1 }}></div>
     </div>
     <div className="overlay-toolbar">
       <div className="overlay-bar-type">
         <button onClick={() => dispatch(setCategory("fish"))}>Fish</button>
         <button onClick={() => dispatch(setCategory("props"))}>Decorations</button>
-        <button onClick={() => dispatch(clearArrangement())}>Clear</button>
+        <button onClick={() => dispatch(setCategory("delete"))}>Delete</button>
       </div>
       { category === "props" && <TransformTools /> }
       <div className="overlay-tools">

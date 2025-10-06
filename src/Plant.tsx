@@ -4,13 +4,14 @@ import { useEffect, useMemo } from 'react'
 import * as util from './util'
 import { type Color } from 'three'
 
-function Plant({ type, position, scale, rotation, color }: {
+function Plant({ type, position, scale, rotation, color, onClick }: {
   type: number,
   position: Vector3,
   scale: number,
   rotation: number,
   color?: Color,
-  noPhysics?: boolean
+  noPhysics?: boolean,
+  onClick?: () => void,
 }) {
   const { scene: plant0Scene } = useGLTF('/models/plant0.glb')
   const { scene: plant1Scene } = useGLTF('/models/plant1.glb')
@@ -36,6 +37,7 @@ function Plant({ type, position, scale, rotation, color }: {
     position={position}
     scale={[ scale, scale, scale ]}
     rotation={[ 0, rotation, 0 ]}
+    onClick={onClick}
   />
 }
 

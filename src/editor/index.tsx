@@ -9,7 +9,8 @@ import Goldfish from '../Goldfish.tsx'
 import * as util from '../util'
 
 import type { Arrangement, ArrangementProp } from '../Arrangement.ts'
-import { useAppSelector } from '../state/hooks.ts'
+import { useAppSelector, useAppDispatch } from '../state/hooks.ts'
+import { deleteProp } from './editorSlice.ts'
 
 const fishMap: {
   [key: string]: () => ReactElement
@@ -45,30 +46,41 @@ function Editor({
   edit?: boolean
 }) {
   const arrangement = useAppSelector(state => state.editor.arrangement)
+  const dispatch = useAppDispatch()
 
   return <>
     {/* insert fish from arrangement */}
     {createFishFromArrangement(arrangement)}
 
     {/* insert props from arrangement */}
-    {arrangement.props.map((p: ArrangementProp, idx: number) => {
+    {arrangement.props.map((p: ArrangementProp) => {
       if (p.name === "plant") {
         return <Plant
-          key={"plant" + idx}
+          key={p.id}
           type={p.type || 0}
           position={p.pos}
           scale={p.scale || 1}
           rotation={p.rotation || 0}
           color={p.color && util.rgbToThreeColor(p.color)}
+
+          /* editor delete */
+          onClick={edit ? (() => {
+            dispatch(deleteProp(p.id))
+          }) : undefined}
         />
       } else if (p.name == "rock") {
         return <Rock
-          key={"rock" + idx}
+          key={p.id}
           type={p.type || 0}
           position={p.pos}
           scale={p.scale || 1}
           rotation={p.rotation || 0}
           color={p.color && util.rgbToThreeColor(p.color)}
+
+          /* editor delete */
+          onClick={edit ? (() => {
+            dispatch(deleteProp(p.id))
+          }) : undefined}
         />
       }
     })}

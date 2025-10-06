@@ -51,7 +51,8 @@
 .overlay-bar-type {
   padding: 5px;
   padding-bottom: 0px;
-  width: 160px;
+  min-width: 120px;
+  max-width: 120px;
   border-right: 2px solid white;
   display: flex;
   flex-direction: column;

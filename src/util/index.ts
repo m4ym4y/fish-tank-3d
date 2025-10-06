@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import queryString from 'query-string'
-import { type Arrangement, defaultArrangement } from '../Arrangement'
+import { type Arrangement, type ArrangementProp, defaultArrangement } from '../Arrangement'
 
 // rapier interaction groups
 export const iGroups = {
@@ -52,8 +52,17 @@ export function disableFog(scene: THREE.Group<THREE.Object3DEventMap>) {
 }
 
 export function serializeArrangement(arrangement: Arrangement) {
+  const arrangementClone: any = {
+    ...arrangement,
+    props: arrangement.props.map(p => ({ ...p }))
+  }
+
+  arrangementClone.props.forEach((p: Omit<ArrangementProp, 'id'> & { id?: string }) => {
+    delete p.id
+  })
+
   const textEncoder = new TextEncoder()
-  const encoded = textEncoder.encode(JSON.stringify(arrangement))
+  const encoded = textEncoder.encode(JSON.stringify(arrangementClone))
   const byteString = String.fromCharCode(...encoded)
 
   return btoa(byteString)
@@ -67,7 +76,12 @@ export function deserializeArrangement(serialized: string) {
   const decoder = new TextDecoder('utf8')
   const decoded = decoder.decode(encoded)
 
-  return JSON.parse(decoded)
+  const parsed = JSON.parse(decoded)
+  parsed.props.forEach((prop: ArrangementProp) => {
+    console.log(prop.id)
+  })
+
+  return parsed
 }
 
 export function getQParam(qParams: queryString.ParsedQuery, key: string): string | null {

@@ -56,7 +56,8 @@ export const editorSlice = createSlice({
         ...state.selected,
         scale: state.transform.scale,
         rotation: state.transform.rotationDegrees * ((2 * Math.PI) / 360),
-        ...action.payload
+        ...action.payload,
+        id: crypto.randomUUID(),
       }
 
       if (state.transform.colorTintEnabled) {
@@ -120,8 +121,13 @@ export const editorSlice = createSlice({
       }
       state.transform.colorTintEnabled = action.payload.colorTintEnabled
     },
+
+    deleteProp: (state, action: PayloadAction<string>) => {
+      if (state.category !== "delete") return
+      state.arrangement.props = state.arrangement.props.filter((p: ArrangementProp) => p.id !== action.payload)
+    },
   }
 })
 
-export const { setFishAmount, selectProp, addProp, clearArrangement, setPropScale, setPropRotation, changePropScale, changePropRotation, setCategory, loadArrangement, editorUndo, editorRedo, addHistoryDepth, removeHistoryDepth, changeColor } = editorSlice.actions
+export const { setFishAmount, selectProp, addProp, clearArrangement, setPropScale, setPropRotation, changePropScale, changePropRotation, setCategory, loadArrangement, editorUndo, editorRedo, addHistoryDepth, removeHistoryDepth, changeColor, deleteProp } = editorSlice.actions
 export default editorSlice.reducer
