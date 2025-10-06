@@ -1,5 +1,6 @@
 import type { ThreeEvent } from '@react-three/fiber'
 import {useEffect, useRef, type ReactElement} from 'react'
+import {useRapier, interactionGroups} from '@react-three/rapier'
 import * as THREE from 'three'
 
 import {
@@ -10,8 +11,11 @@ import { useAppSelector, useAppDispatch } from '../state/hooks.ts'
 import Rock from '../Rock.tsx'
 import Plant from '../Plant.tsx'
 import * as util from '../util'
+import {useThree} from '@react-three/fiber'
+import type {BufferGeometry} from 'three'
 
 const WHITE = new THREE.Color(1.0, 1.0, 1.0)
+const GROUND_HEIGHT = -9
 
 interface propParams {
   type: number
@@ -27,11 +31,33 @@ const propMap: {
   'plant': Plant
 }
 
+function getGhostRefPosition (
+  rapier: ReturnType<typeof useRapier>["rapier"],
+  world: ReturnType<typeof useRapier>["world"],
+  camera: THREE.Camera,
+  groundPoint: THREE.Vector3
+): [number, number, number] | null {
+  const ray = new rapier.Ray(camera.position, groundPoint.clone().sub(camera.position).normalize())
+  const hit = world.castRay(ray, 999, false, undefined, interactionGroups(3, 1))
+
+  if (hit !== null) {
+    const p = ray.pointAt(hit.timeOfImpact)
+    return [p.x, Math.max(p.y, GROUND_HEIGHT), p.z]
+  } else if (groundPoint.y > -8.9) {
+    return null
+  } else {
+    return [groundPoint.x, GROUND_HEIGHT, groundPoint.z]
+  }
+}
+
 function ActivePlane() {
   const ghostRef = useRef<THREE.Mesh | null>(null)
   const matRef = useRef<THREE.MeshStandardMaterial | null>(null)
   const dispatch = useAppDispatch()
   const mouseDownEvent = useRef<ThreeEvent<MouseEvent> | null>(null)
+
+  const { world, rapier } = useRapier()
+  const { camera } = useThree()
 
   const transform = useAppSelector(state => state.editor.transform)
   const selected = useAppSelector(state => state.editor.selected)
@@ -50,9 +76,12 @@ function ActivePlane() {
       )
 
       if (dist <= 5) {
-        dispatch(addProp({
-          pos: [ev.point.x, -9, ev.point.z]
-        }))
+        const point = getGhostRefPosition(rapier, world, camera, ev.point)
+        if (point) {
+          dispatch(addProp({
+            pos: point
+          }))
+        }
       }
     }
   }
@@ -83,7 +112,7 @@ function ActivePlane() {
 
   return <>
     <mesh
-      position={[0, -9, 0]}
+      position={[0, 0, 0]}
       rotation={[-Math.PI / 2, 0, 0]}
       onPointerDown={onPointerDown}
       onPointerUp={onPointerUp}
@@ -103,14 +132,21 @@ function ActivePlane() {
         }
 
         if (ghostRef.current) {
-          ghostRef.current.position.x = ev.point.x
-          ghostRef.current.position.y = -9
-          ghostRef.current.position.z = ev.point.z
+          const position = getGhostRefPosition(rapier, world, camera, ev.point)
+
+          if (position) {
+            ghostRef.current.visible = true
+            ghostRef.current.position.x = position[0]
+            ghostRef.current.position.y = position[1]
+            ghostRef.current.position.z = position[2]
+          } else {
+            ghostRef.current.visible = false
+          }
         }
       }}
     >
-      <planeGeometry args={[20, 20]} />
-      <meshStandardMaterial opacity={0} transparent />
+      <boxGeometry args={[20, 20, 18]} />
+      <meshStandardMaterial opacity={0} transparent side={THREE.BackSide} />
     </mesh>
     <group visible={category === "props"}>
       <group
