@@ -54,7 +54,6 @@ function Editor({
 
     {/* insert props from arrangement */}
     {arrangement.props.map((p: ArrangementProp) => {
-      console.log('prop id', p.id)
       if (p.name === "plant") {
         return <Plant
           key={p.id}
