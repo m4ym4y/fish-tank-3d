@@ -66,7 +66,7 @@ function ghostInBoundary (
 
 function ActivePlane() {
   const ghostRef = useRef<THREE.Mesh | null>(null)
-  const matRef = useRef<THREE.MeshStandardMaterial | null>(null)
+  const matRef = useRef<THREE.MeshStandardMaterial[] | null>(null)
   const dispatch = useAppDispatch()
   const mouseDownEvent = useRef<ThreeEvent<MouseEvent> | null>(null)
   const htmlRef = useRef<React.ComponentRef<typeof Html> | null>(null)
@@ -105,13 +105,18 @@ function ActivePlane() {
 
   useEffect(() => {
     if (ghostRef.current) {
+      matRef.current = []
       ghostRef.current.traverse(obj => {
         const mesh = obj as THREE.Mesh
         if (mesh.isMesh && mesh.material) {
           // im too tired for this rn
           if (Array.isArray(mesh.material)) return
           const newMat = mesh.material.clone() as THREE.MeshStandardMaterial
-          matRef.current = newMat
+
+          if (matRef.current) {
+            newMat.userData.originalColor = newMat.color
+            matRef.current.push(newMat)
+          }
 
           if (transform.colorTintEnabled) {
             newMat.color = util.rgbToThreeColor(transform.colorTint)
@@ -148,12 +153,9 @@ function ActivePlane() {
         const colorTint = util.rgbToThreeColor(transform.colorTint)
         if (matRef.current) {
           if (ghostRef.current && !ghostInBoundary(ghostRef.current)) {
-            matRef.current.color = RED
-          } else if (
-            matRef.current.color.equals(colorTint) ||
-            (!matRef.current.color.equals(WHITE) && !transform.colorTintEnabled)
-          ) {
-            matRef.current.color = transform.colorTintEnabled ? colorTint : WHITE 
+            matRef.current.forEach(m => m.color = RED)
+          } else {
+            matRef.current.forEach(m => m.color = transform.colorTintEnabled ? colorTint : m.userData.originalColor)
           }
         }
 
@@ -205,6 +207,8 @@ function ActivePlane() {
             color: 'red',
             minWidth: '80px',
             position: 'absolute',
+            opacity: '0.5',
+            backgroundColor: 'white',
             top: '-50px',
             left: '-40px'
           }}
