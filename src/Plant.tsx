@@ -9,7 +9,8 @@ function Plant({ type, position, scale, rotation, color }: {
   position: Vector3,
   scale: number,
   rotation: number,
-  color?: Color
+  color?: Color,
+  noPhysics?: boolean
 }) {
   const { scene: plant0Scene } = useGLTF('/models/plant0.glb')
   const { scene: plant1Scene } = useGLTF('/models/plant1.glb')
