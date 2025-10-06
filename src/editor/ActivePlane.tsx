@@ -69,6 +69,7 @@ function ActivePlane() {
   const matRef = useRef<THREE.MeshStandardMaterial[] | null>(null)
   const dispatch = useAppDispatch()
   const mouseDownEvent = useRef<ThreeEvent<MouseEvent> | null>(null)
+  const htmlRef = useRef<React.ComponentRef<typeof Html> | null>(null)
 
   const { world, rapier } = useRapier()
   const { camera } = useThree()
@@ -142,6 +143,10 @@ function ActivePlane() {
         if (ghostRef.current) {
           ghostRef.current.visible = false
         }
+
+        if (htmlRef.current) {
+          htmlRef.current.style.visibility = 'hidden'
+        }
       }}
       onPointerMove={(ev: ThreeEvent<MouseEvent>) => {
         // lazily set color
@@ -157,6 +162,11 @@ function ActivePlane() {
         if (ghostRef.current) {
           const position = getGhostRefPosition(rapier, world, camera, ev.point)
 
+          if (htmlRef.current) {
+            const inBounds = ghostInBoundary(ghostRef.current)
+            htmlRef.current.style.visibility = inBounds ? 'hidden' : 'visible'
+          }
+
           if (position) {
             ghostRef.current.visible = true
             ghostRef.current.position.x = position[0]
@@ -164,6 +174,9 @@ function ActivePlane() {
             ghostRef.current.position.z = position[2]
           } else {
             ghostRef.current.visible = false
+            if (htmlRef.current) {
+              htmlRef.current.style.visibility = 'hidden'
+            }
           }
         }
       }}
@@ -185,6 +198,23 @@ function ActivePlane() {
           rotation={0}
           scale={1}
         />
+        <Html
+          ref={htmlRef}
+          style={{
+            pointerEvents: 'none',
+            fontFamily: "sans-serif",
+            fontSize: 12, visibility: 'hidden',
+            color: 'red',
+            minWidth: '80px',
+            position: 'absolute',
+            opacity: '0.5',
+            backgroundColor: 'white',
+            top: '-50px',
+            left: '-40px'
+          }}
+        >
+          out of bounds
+        </Html>
       </group>
     </group>
   </>
