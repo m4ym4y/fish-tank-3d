@@ -17,7 +17,7 @@ function EmbedTools() {
   qParams.arrangement = serialized
   qParams.view = 'true'
   url.search = queryString.stringify(qParams)
-  const embedText = `<iframe width="400" height="300" src="${url.href}" />`
+  const embedText = `<iframe width="400" height="300" src="${url.href}"></iframe>`
 
   const copyEmbedCode = async () => {
     await navigator.clipboard.writeText(embedText)
