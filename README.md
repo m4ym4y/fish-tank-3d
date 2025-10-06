@@ -30,5 +30,6 @@ The goal for this is to have an editor where you can make a fish tank, and then 
 - [x] customize color of props
 - [ ] click to feed fish
 - [ ] more shapes of fish tank
+- [ ] customize fish tank color
 - [ ] non-fish creatures (shrimps? snails?)
 - [ ] instance meshes?
