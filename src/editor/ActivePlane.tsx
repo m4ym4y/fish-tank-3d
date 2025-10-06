@@ -1,6 +1,7 @@
 import type { ThreeEvent } from '@react-three/fiber'
 import {useEffect, useRef, type ReactElement} from 'react'
 import {useRapier, interactionGroups} from '@react-three/rapier'
+import { Html } from '@react-three/drei'
 import * as THREE from 'three'
 
 import {
@@ -12,12 +13,18 @@ import Rock from '../Rock.tsx'
 import Plant from '../Plant.tsx'
 import * as util from '../util'
 import {useThree} from '@react-three/fiber'
-import type {BufferGeometry} from 'three'
 
 const WHITE = new THREE.Color(1.0, 1.0, 1.0)
+const RED = new THREE.Color(1.0, 0.5, 0.5)
 const GROUND_HEIGHT = -9
+const GROUND_THRESHOLD = GROUND_HEIGHT + 0.1
+const TANK_BOUNDS = new THREE.Box3(
+  new THREE.Vector3(-10, -20, -10),
+  new THREE.Vector3(10, 20, 10)
+)
 
 interface propParams {
+  noPhysics?: boolean
   type: number
   position: [number, number, number]
   scale: number
@@ -43,11 +50,18 @@ function getGhostRefPosition (
   if (hit !== null) {
     const p = ray.pointAt(hit.timeOfImpact)
     return [p.x, Math.max(p.y, GROUND_HEIGHT), p.z]
-  } else if (groundPoint.y > -8.9) {
+  } else if (groundPoint.y > GROUND_THRESHOLD) {
     return null
   } else {
     return [groundPoint.x, GROUND_HEIGHT, groundPoint.z]
   }
+}
+
+function ghostInBoundary (
+  ghost: THREE.Mesh
+): boolean {
+  const ghostBox = new THREE.Box3().setFromObject(ghost)
+  return TANK_BOUNDS.containsBox(ghostBox)
 }
 
 function ActivePlane() {
@@ -55,6 +69,7 @@ function ActivePlane() {
   const matRef = useRef<THREE.MeshStandardMaterial | null>(null)
   const dispatch = useAppDispatch()
   const mouseDownEvent = useRef<ThreeEvent<MouseEvent> | null>(null)
+  const htmlRef = useRef<React.ComponentRef<typeof Html> | null>(null)
 
   const { world, rapier } = useRapier()
   const { camera } = useThree()
@@ -75,9 +90,11 @@ function ActivePlane() {
         Math.pow(ev.screenY - mouseDownEvent.current.screenY, 2)
       )
 
-      if (dist <= 5) {
+      if (dist <= 5 && ghostRef.current) {
         const point = getGhostRefPosition(rapier, world, camera, ev.point)
-        if (point) {
+        const inBounds = ghostInBoundary(ghostRef.current)
+
+        if (point && inBounds) {
           dispatch(addProp({
             pos: point
           }))
@@ -104,7 +121,6 @@ function ActivePlane() {
           mesh.material.opacity = 0.5
           mesh.material.transparent = true
           mesh.material.needsUpdate = true
-
         }
       })
     }
@@ -118,21 +134,36 @@ function ActivePlane() {
       onPointerUp={onPointerUp}
 
       onPointerOver={() => { if (ghostRef.current) ghostRef.current.visible = true }}
-      onPointerOut={() => { if (ghostRef.current) ghostRef.current.visible = false }}
+      onPointerOut={() => {
+        if (ghostRef.current) {
+          ghostRef.current.visible = false
+        }
+
+        if (htmlRef.current) {
+          htmlRef.current.style.visibility = 'hidden'
+        }
+      }}
       onPointerMove={(ev: ThreeEvent<MouseEvent>) => {
         // lazily set color
         const colorTint = util.rgbToThreeColor(transform.colorTint)
-        if (
-          matRef.current && (
+        if (matRef.current) {
+          if (ghostRef.current && !ghostInBoundary(ghostRef.current)) {
+            matRef.current.color = RED
+          } else if (
             matRef.current.color.equals(colorTint) ||
             (!matRef.current.color.equals(WHITE) && !transform.colorTintEnabled)
-          )
-        ) {
-          matRef.current.color = transform.colorTintEnabled ? colorTint : WHITE 
+          ) {
+            matRef.current.color = transform.colorTintEnabled ? colorTint : WHITE 
+          }
         }
 
         if (ghostRef.current) {
           const position = getGhostRefPosition(rapier, world, camera, ev.point)
+
+          if (htmlRef.current) {
+            const inBounds = ghostInBoundary(ghostRef.current)
+            htmlRef.current.style.visibility = inBounds ? 'hidden' : 'visible'
+          }
 
           if (position) {
             ghostRef.current.visible = true
@@ -141,6 +172,9 @@ function ActivePlane() {
             ghostRef.current.position.z = position[2]
           } else {
             ghostRef.current.visible = false
+            if (htmlRef.current) {
+              htmlRef.current.style.visibility = 'hidden'
+            }
           }
         }
       }}
@@ -156,11 +190,27 @@ function ActivePlane() {
         scale={[ transform.scale, transform.scale, transform.scale ]}
       >
         <PropType
+          noPhysics
           type={selected.type}
           position={[ 0, 0, 0 ]}
           rotation={0}
           scale={1}
         />
+        <Html
+          ref={htmlRef}
+          style={{
+            pointerEvents: 'none',
+            fontFamily: "sans-serif",
+            fontSize: 12, visibility: 'hidden',
+            color: 'red',
+            minWidth: '80px',
+            position: 'absolute',
+            top: '-50px',
+            left: '-40px'
+          }}
+        >
+          out of bounds
+        </Html>
       </group>
     </group>
   </>
