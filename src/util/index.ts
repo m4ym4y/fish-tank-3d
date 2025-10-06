@@ -2,6 +2,14 @@ import * as THREE from 'three'
 import queryString from 'query-string'
 import { type Arrangement, defaultArrangement } from '../Arrangement'
 
+// rapier interaction groups
+export const iGroups = {
+  BOUNDARY: 0,
+  STATIC: 1,
+  DYNAMIC: 2,
+  GHOST: 3, // editor ghost
+}
+
 export function castShadows(scene: THREE.Group<THREE.Object3DEventMap>) {
   scene.traverse(child => {
     if ((child as THREE.Mesh).isMesh) {

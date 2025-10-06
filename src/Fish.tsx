@@ -1,7 +1,8 @@
 import { useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
-import { euler, quat, RapierRigidBody, RigidBody, vec3 } from '@react-three/rapier'
+import { euler, interactionGroups, quat, RapierRigidBody, RigidBody, vec3 } from '@react-three/rapier'
 import * as THREE from 'three'
+import * as util from './util'
 
 const gAccel = -0.1
 const vAngular = 0.5
@@ -94,7 +95,17 @@ function Fish({
     }
   })
 
-  return <RigidBody ref={fishRef} colliders={"cuboid"} linearDamping={5} angularDamping={5}>
+  return <RigidBody
+    ref={fishRef}
+    colliders={"cuboid"}
+    linearDamping={5}
+    angularDamping={5}
+    collisionGroups={interactionGroups(util.iGroups.DYNAMIC, [
+      util.iGroups.BOUNDARY,
+      util.iGroups.STATIC,
+      util.iGroups.DYNAMIC,
+    ])}
+  >
     {children}
   </RigidBody>
 }

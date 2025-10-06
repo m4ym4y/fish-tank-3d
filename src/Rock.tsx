@@ -1,6 +1,6 @@
 import { useGLTF } from '@react-three/drei'
 import type {Vector3} from '@react-three/fiber'
-import { RigidBody } from '@react-three/rapier'
+import { RigidBody, interactionGroups } from '@react-three/rapier'
 import { useEffect, useMemo } from 'react'
 import * as util from './util'
 import { type Color } from 'three'
@@ -39,6 +39,7 @@ function Rock({ type, position, scale, rotation, color }: {
     position={position}
     scale={[scale, scale, scale]}
     rotation={[0, rotation, 0]}
+    collisionGroups={interactionGroups(util.iGroups.STATIC)}
   >
     <primitive object={uniqueRockScene} />
   </RigidBody>

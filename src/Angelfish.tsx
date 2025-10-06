@@ -3,7 +3,7 @@ import { useFrame } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 import * as util from './util'
-import {euler, quat, RapierRigidBody, RigidBody} from '@react-three/rapier'
+import {euler, quat, RapierRigidBody, RigidBody, interactionGroups} from '@react-three/rapier'
 
 const rotationChangeFrequency = 0.3
 const rotationAccel = 0.3
@@ -79,7 +79,17 @@ function Angelfish() {
     }
   })
 
-  return <RigidBody ref={fishRef} colliders={'cuboid'} linearDamping={5} angularDamping={5}>
+  return <RigidBody
+    ref={fishRef}
+    colliders={'cuboid'}
+    linearDamping={5}
+    angularDamping={5}
+    collisionGroups={interactionGroups(util.iGroups.DYNAMIC, [
+      util.iGroups.BOUNDARY,
+      util.iGroups.STATIC,
+      util.iGroups.DYNAMIC,
+    ])}
+  >
     <primitive object={uniqueScene} />
   </RigidBody>
 }

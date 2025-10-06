@@ -1,5 +1,5 @@
 import { useGLTF } from '@react-three/drei'
-import { CuboidCollider, RigidBody } from '@react-three/rapier'
+import { CuboidCollider, RigidBody, interactionGroups } from '@react-three/rapier'
 import * as util from './util'
 
 function Tank() {
@@ -7,7 +7,11 @@ function Tank() {
   util.receiveShadows(scene)
   util.disableFog(scene)
 
-  return <RigidBody type="fixed" colliders={false}>
+  return <RigidBody
+    type="fixed"
+    colliders={false}
+    collisionGroups={interactionGroups(util.iGroups.BOUNDARY)}
+  >
     <CuboidCollider args={[1, 10, 10]} position={[-11, 0, 0 ]} />
     <CuboidCollider args={[1, 10, 10]} position={[11, 0, 0 ]} />
     <CuboidCollider args={[12, 10, 1]} position={[0, 0, -11 ]} />
