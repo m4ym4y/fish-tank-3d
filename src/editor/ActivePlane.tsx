@@ -14,7 +14,6 @@ import Plant from '../Plant.tsx'
 import * as util from '../util'
 import {useThree} from '@react-three/fiber'
 
-const WHITE = new THREE.Color(1.0, 1.0, 1.0)
 const RED = new THREE.Color(1.0, 0.5, 0.5)
 const GROUND_HEIGHT = -9
 const GROUND_THRESHOLD = GROUND_HEIGHT + 0.1
@@ -98,6 +97,13 @@ function ActivePlane() {
           dispatch(addProp({
             pos: point
           }))
+        } else if (!inBounds && htmlRef.current) {
+          htmlRef.current.style.visibility = 'visible'
+          setTimeout(() => {
+            if (htmlRef.current) {
+              htmlRef.current.style.visibility = 'hidden'
+            }
+          }, 500)
         }
       }
     }
@@ -143,10 +149,6 @@ function ActivePlane() {
         if (ghostRef.current) {
           ghostRef.current.visible = false
         }
-
-        if (htmlRef.current) {
-          htmlRef.current.style.visibility = 'hidden'
-        }
       }}
       onPointerMove={(ev: ThreeEvent<MouseEvent>) => {
         // lazily set color
@@ -162,11 +164,6 @@ function ActivePlane() {
         if (ghostRef.current) {
           const position = getGhostRefPosition(rapier, world, camera, ev.point)
 
-          if (htmlRef.current) {
-            const inBounds = ghostInBoundary(ghostRef.current)
-            htmlRef.current.style.visibility = inBounds ? 'hidden' : 'visible'
-          }
-
           if (position) {
             ghostRef.current.visible = true
             ghostRef.current.position.x = position[0]
@@ -174,9 +171,6 @@ function ActivePlane() {
             ghostRef.current.position.z = position[2]
           } else {
             ghostRef.current.visible = false
-            if (htmlRef.current) {
-              htmlRef.current.style.visibility = 'hidden'
-            }
           }
         }
       }}
@@ -203,14 +197,14 @@ function ActivePlane() {
           style={{
             pointerEvents: 'none',
             fontFamily: "sans-serif",
-            fontSize: 12, visibility: 'hidden',
+            fontSize: 14,
+            visibility: 'hidden',
             color: 'red',
-            minWidth: '80px',
+            textAlign: 'center',
+            minWidth: '120px',
             position: 'absolute',
-            opacity: '0.5',
-            backgroundColor: 'white',
             top: '-50px',
-            left: '-40px'
+            left: '-60px'
           }}
         >
           out of bounds
