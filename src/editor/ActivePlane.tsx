@@ -83,6 +83,8 @@ function ActivePlane() {
   }
 
   const onPointerUp = (ev: ThreeEvent<MouseEvent>) => {
+    if (category !== 'props') return
+
     if (mouseDownEvent.current) {
       const dist = Math.sqrt(
         Math.pow(ev.screenX - mouseDownEvent.current.screenX, 2) +
@@ -97,7 +99,7 @@ function ActivePlane() {
           dispatch(addProp({
             pos: point
           }))
-        } else if (!inBounds && htmlRef.current) {
+        } else if (!inBounds && htmlRef.current && ghostRef.current.visible) {
           htmlRef.current.style.visibility = 'visible'
           setTimeout(() => {
             if (htmlRef.current) {
@@ -151,6 +153,8 @@ function ActivePlane() {
         }
       }}
       onPointerMove={(ev: ThreeEvent<MouseEvent>) => {
+        if (category !== 'props') return
+
         // lazily set color
         const colorTint = util.rgbToThreeColor(transform.colorTint)
         if (matRef.current) {
