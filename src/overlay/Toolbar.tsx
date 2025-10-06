@@ -60,16 +60,28 @@ function Toolbar() {
   const category = useAppSelector(state => state.editor.category)
   const fishState = useAppSelector(state => state.editor.arrangement.fish)
 
-  return <>
+  return <div className={category === "view" ? "overlay-view-mode" : ""}>
     <div className="overlay-popup-toolbar">
-      <HistoryTools />
-      <EmbedTools />
-      <div className="overlay-popup-tool">
-        <button onClick={() => dispatch(clearArrangement())}>
-          Clear
+      {category === "view" && <div className="overlay-popup-tool">
+        <button onClick={() => dispatch(setCategory("props"))}>
+          Show Tools
         </button>
-      </div>
-      <div style={{ flexGrow: 1 }}></div>
+      </div>}
+      {category !== "view" && <>
+        <div className="overlay-popup-tool">
+          <button onClick={() => dispatch(setCategory("view"))}>
+            Hide Tools
+          </button>
+        </div>
+        <HistoryTools />
+        <EmbedTools />
+        <div className="overlay-popup-tool">
+          <button onClick={() => dispatch(clearArrangement())}>
+            Clear
+          </button>
+        </div>
+        <div style={{ flexGrow: 1 }}></div>
+      </>}
     </div>
     <div className="overlay-toolbar">
       <div className="overlay-bar-type">
@@ -98,7 +110,7 @@ function Toolbar() {
             onClick={() => dispatch(selectProp(prop.selector))} />)}
       </div>
     </div>
-  </>
+  </div>
 }
 
 export default Toolbar

@@ -11,6 +11,10 @@
   display: flex;
 }
 
+.overlay-view-mode .overlay-toolbar {
+  display: none;
+}
+
 .overlay-popup-toolbar {
   position: absolute;
   bottom: 100px;
@@ -22,6 +26,10 @@
   padding-left: 0px;
   padding-top: 0px;
   box-sizing: border-box;
+}
+
+.overlay-view-mode .overlay-popup-toolbar {
+  bottom: 0px;
 }
 
 .overlay-popup-tool {
