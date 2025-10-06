@@ -78,7 +78,7 @@ export function deserializeArrangement(serialized: string) {
 
   const parsed = JSON.parse(decoded)
   parsed.props.forEach((prop: ArrangementProp) => {
-    console.log(prop.id)
+    prop.id = crypto.randomUUID()
   })
 
   return parsed

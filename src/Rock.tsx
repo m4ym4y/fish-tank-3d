@@ -1,5 +1,5 @@
 import { useGLTF } from '@react-three/drei'
-import type {Vector3} from '@react-three/fiber'
+import type {ThreeEvent, Vector3} from '@react-three/fiber'
 import { RigidBody, interactionGroups } from '@react-three/rapier'
 import { useEffect, useMemo } from 'react'
 import * as util from './util'
@@ -12,7 +12,7 @@ function Rock({ type, position, scale, rotation, color, noPhysics, onClick }: {
   rotation: number,
   color?: Color,
   noPhysics?: boolean,
-  onClick?: () => void,
+  onClick?: (ev: ThreeEvent<MouseEvent>) => void,
 }) {
   const { scene: rock0Scene } = useGLTF('/models/rock0.glb')
   const { scene: rock1Scene } = useGLTF('/models/rock1.glb')

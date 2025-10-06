@@ -54,6 +54,7 @@ function Editor({
 
     {/* insert props from arrangement */}
     {arrangement.props.map((p: ArrangementProp) => {
+      console.log('prop id', p.id)
       if (p.name === "plant") {
         return <Plant
           key={p.id}
@@ -64,7 +65,8 @@ function Editor({
           color={p.color && util.rgbToThreeColor(p.color)}
 
           /* editor delete */
-          onClick={edit ? (() => {
+          onClick={edit ? (ev => {
+            ev.stopPropagation()
             dispatch(deleteProp(p.id))
           }) : undefined}
         />
@@ -78,7 +80,8 @@ function Editor({
           color={p.color && util.rgbToThreeColor(p.color)}
 
           /* editor delete */
-          onClick={edit ? (() => {
+          onClick={edit ? (ev => {
+            ev.stopPropagation()
             dispatch(deleteProp(p.id))
           }) : undefined}
         />

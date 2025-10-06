@@ -1,5 +1,5 @@
 import { useGLTF } from '@react-three/drei'
-import type {Vector3} from '@react-three/fiber'
+import type {ThreeEvent, Vector3} from '@react-three/fiber'
 import { useEffect, useMemo } from 'react'
 import * as util from './util'
 import { type Color } from 'three'
@@ -11,7 +11,7 @@ function Plant({ type, position, scale, rotation, color, onClick }: {
   rotation: number,
   color?: Color,
   noPhysics?: boolean,
-  onClick?: () => void,
+  onClick?: (ev: ThreeEvent<MouseEvent>) => void,
 }) {
   const { scene: plant0Scene } = useGLTF('/models/plant0.glb')
   const { scene: plant1Scene } = useGLTF('/models/plant1.glb')
