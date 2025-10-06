@@ -24,8 +24,8 @@ The goal for this is to have an editor where you can make a fish tank, and then 
 - [x] editor
 - [x] undo/redo in editor
 - [ ] delete objects in editor
-- [ ] prevent editor objects from clipping into tank
-- [ ] allow placement of objects on top of one another
+- [x] prevent editor objects from clipping into tank
+- [x] allow placement of objects on top of one another
 - [x] embed with settings in url
 - [ ] customize color of fish/props?
 - [ ] click to feed fish
