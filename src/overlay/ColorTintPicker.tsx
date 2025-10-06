@@ -30,7 +30,6 @@ function ColorTintPicker() {
           </button>
           <div className="spacer" />
           <button onClick={() => {
-            console.log('set show color false')
             setShowColor(false)
           }}>X</button>
         </div>
