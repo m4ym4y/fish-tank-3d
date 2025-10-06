@@ -23,11 +23,11 @@ The goal for this is to have an editor where you can make a fish tank, and then 
 - [ ] bubble particles from plants
 - [x] editor
 - [x] undo/redo in editor
-- [ ] delete objects in editor
+- [x] delete objects in editor
 - [x] prevent editor objects from clipping into tank
 - [x] allow placement of objects on top of one another
 - [x] embed with settings in url
-- [ ] customize color of fish/props?
+- [x] customize color of props
 - [ ] click to feed fish
 - [ ] more shapes of fish tank
 - [ ] non-fish creatures (shrimps? snails?)
