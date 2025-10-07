@@ -50,7 +50,7 @@ export const editorSlice = createSlice({
       state.selected.type = action.payload.type
     },
 
-    addProp: (state, action: PayloadAction<Omit<Omit<ArrangementProp, 'name'>, 'type'>>) => {
+    addProp: (state, action: PayloadAction<Omit<Omit<Omit<ArrangementProp, 'name'>, 'type'>, 'id'>>) => {
       if (state.category !== 'props') return
       const prop = {
         ...state.selected,
